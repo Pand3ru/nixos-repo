@@ -10,15 +10,17 @@
 	anki-bin
 	signal-desktop
 	bemenu
-	alacritty
 	firefox
 	git
 	curl
 	feh
-	lxappearence
+	lxappearance
 	xfce.xfce4-settings
 	pywal
 	imagemagick
 	wireguard-tools
+	gnumake
   ];
+  # We do this to only have the daemon ran on local user
+  services.kdeconnect.enable = true;
 }

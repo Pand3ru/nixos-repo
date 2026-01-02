@@ -26,8 +26,8 @@
 	  home-manager.nixosModules.home-manager
 	  {
 	    home-manager.users.panderu =
-	      import ./home/panderu.nix
-	  };
+	      import ./home/panderu.nix;
+	  }
 	];
     };
   };

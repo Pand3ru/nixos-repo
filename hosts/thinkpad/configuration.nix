@@ -40,6 +40,11 @@
 
   hardware.bluetooth.enable = true;
 
+  networking.firewall = rec {
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = allowedTCPPortRanges;
+  };
+
   programs = {
     zsh.enable = true; 
   };
@@ -48,19 +53,17 @@
     enable = true;
     xkb.layout = "us";
     xkb.variant = "";
-
     windowManager.i3.enable = true;
-
     desktopManager.xfce = {
       enable = true;
       noDesktop = true;
       enableXfwm = false;
     };
-
-    displayManager.lightdm.enable = true;
-    displayManager.lightdm.defaultSession = "i3";
+    displayManager = {
+      lightdm.enable = true;
+      defaultSession = "xfce+i3";
+    };
   };
-
   services.gnome.gnome-keyring.enable = true;
   services.gvfs.enable = true;
   services.blueman.enable = true;

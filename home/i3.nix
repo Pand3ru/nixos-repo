@@ -1,4 +1,7 @@
 { config, pkgs, ...}:
+let 
+  wallpaper = builtins.toString ./assets/wallpaper.png;
+in
 {
   xsession.windowManager.i3 = {
     enable = true;
@@ -74,10 +77,10 @@
       };
       
       startup = [
+        { command = "${pkgs.pywal}/bin/wal -i ${wallpaper}"; always = true; }
         { command = "nm-applet"; always = true; }
         { command = "blueman-applet"; always = true; }
-        { command = "${pkgs.pywal}/bin/wal -i /home/panderu/wallpaper2.jpg"; always = true; }
-        { command = "${pkgs.feh}/bin/feh --bg-scale /home/panderu/wallpaper2.jpg"; always = true; }
+        { command = "${pkgs.feh}/bin/feh --bg-scale ${wallpaper}"; always = true; }
       ];
     };
     

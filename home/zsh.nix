@@ -1,5 +1,4 @@
 { config, pkgs, ...}:
-{
   let
     ohMyZshCustom = "${config.home.homeDirectory}/.config/oh-my-zsh/custom";
   in {
@@ -20,9 +19,16 @@
 	theme = "panderu";
 	custom = ohMyZshCustom;
       };
+
+      initExtra = ''
+         if [ -f "${config.home.homeDirectory}/.cache/wal/colors.sh" ]; then
+   	   source "${config.home.homeDirectory}/.cache/wal/colors.sh"
+         fi
+      '';
     };
+
     home.file.".config/oh-my-zsh/custom/themes/panderu.zsh-theme".text = ''
 	PROMPT='%{$fg[green]%}%n@%m:%{$fg_bold[blue]%}%~ $(git_prompt_info)%{$reset_color%}%(!.#.$) '
     '';
-  };
 }
+

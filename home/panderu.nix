@@ -5,12 +5,10 @@
 	./zsh.nix
 	./i3.nix
 	./theming.nix
-	./kdeconnect.nix
+	./alacritty.nix
   ];
   home = {
-    packages = with pkgs; [
-	make
-    ];
+    packages = with pkgs; [];
 
     username = "panderu";
     homeDirectory = "/home/panderu";
