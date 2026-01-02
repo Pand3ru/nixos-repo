@@ -5,7 +5,7 @@
 	./zsh.nix
 	./i3.nix
 	./theming.nix
-	./alacritty.nix
+	./i3status.nix
   ];
   home = {
     packages = with pkgs; [];

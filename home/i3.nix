@@ -1,6 +1,8 @@
 { config, pkgs, ...}:
-let 
-  wallpaper = builtins.toString ./assets/wallpaper.png;
+let
+  wallpaper = "/home/panderu/nixos/assets/wallpaper.png";
+  fontName = "JetBrainsMono Nerd Font";
+  fontSize = 12;
 in
 {
   xsession.windowManager.i3 = {
@@ -11,6 +13,11 @@ in
       bars = [];
       workspaceLayout = "default";
       
+      fonts = {
+        names = [ fontName ];
+        size = fontSize * 1.0;
+      };
+
       keybindings = let
         mod = "Mod4";
       in {
@@ -18,7 +25,7 @@ in
         "${mod}+p" = "exec ${pkgs.bemenu}/bin/bemenu-run";
         "${mod}+Shift+c" = "kill";
         "${mod}+Shift+r" = "restart";
-        
+
         # Workspace switching
         "${mod}+1" = "workspace number 1";
         "${mod}+2" = "workspace number 2";
@@ -30,7 +37,7 @@ in
         "${mod}+8" = "workspace number 8";
         "${mod}+9" = "workspace number 9";
         "${mod}+0" = "workspace number 10";
-        
+
         # Move to workspace
         "${mod}+Shift+1" = "move container to workspace number 1";
         "${mod}+Shift+2" = "move container to workspace number 2";
@@ -45,9 +52,9 @@ in
 
         "${mod}+j" = "focus left";
         "${mod}+k" = "focus right";
-        
+
         "${mod}+Return" = "mark _swap; focus left; swap container with mark _swap; unmark _swap";
-        
+
         # Layout switching
         "${mod}+t" = "layout tabbed";
         "${mod}+s" = "layout stacking";
@@ -55,16 +62,16 @@ in
         "${mod}+f" = "fullscreen toggle";
         "${mod}+space" = "floating toggle";
         "${mod}+Shift+space" = "focus mode_toggle";
-        
+
         "${mod}+Shift+a" = "floating toggle";
 
         "${mod}+v" = "split v";
         "${mod}+b" = "split h";
-        
+
         "${mod}+l" = "resize shrink width 10 px or 10 ppt";
         "${mod}+h" = "resize grow width 10 px or 10 ppt";
       };
-      
+
       modes = {
         resize = {
           "h" = "resize shrink width 10 px or 10 ppt";
@@ -75,33 +82,35 @@ in
           "Return" = "mode default";
         };
       };
-      
+
       startup = [
         { command = "${pkgs.pywal}/bin/wal -i ${wallpaper}"; always = true; }
         { command = "nm-applet"; always = true; }
         { command = "blueman-applet"; always = true; }
+        { command = "${pkgs.pasystray}/bin/pasystray"; always = true; }
         { command = "${pkgs.feh}/bin/feh --bg-scale ${wallpaper}"; always = true; }
       ];
     };
-    
+
     extraConfig = ''
       bar {
-        font pango:FiraCode Nerd Font 12
+        font pango:${fontName} ${toString fontSize}
         status_command ${pkgs.i3status}/bin/i3status
         tray_output primary
-        
+        separator_symbol " | "
+
         colors {
           background $bg
           statusline $fg
           separator  $color8
-          
+
           focused_workspace       $color4   $color4    $bg
           active_workspace        $color8   $color8    $fg
           inactive_workspace      $bg       $bg        $color8
           urgent_workspace        $color1   $color1    $bg
         }
       }
-      
+
       set_from_resource $fg i3wm.color7 #f0f0f0
       set_from_resource $bg i3wm.color0 #1e1e1e
       set_from_resource $color0 i3wm.color0 #000000
@@ -113,7 +122,7 @@ in
       set_from_resource $color6 i3wm.color6 #00ffff
       set_from_resource $color7 i3wm.color7 #ffffff
       set_from_resource $color8 i3wm.color8 #808080
-      
+
       # class                 border    backgr.   text  indicator child_border
       client.focused          $color4   $color4   $bg   $color4   $color4
       client.focused_inactive $color8   $color8   $fg   $color8   $color8
