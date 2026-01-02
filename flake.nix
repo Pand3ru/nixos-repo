@@ -27,7 +27,7 @@
 	  {
 	    home-manager.users.panderu =
 	      import ./home/panderu.nix
-	  }
+	  };
 	];
     };
   };
