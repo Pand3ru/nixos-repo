@@ -19,5 +19,7 @@
     ripgrep
     fd
     lua-language-server
+    xclip
+    xsel
   ];
 }

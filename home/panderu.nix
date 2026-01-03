@@ -7,6 +7,7 @@
 	./theming.nix
 	./i3status.nix
 	./nvim.nix
+    ./firefox.nix
   ];
   home = {
     packages = with pkgs; [];

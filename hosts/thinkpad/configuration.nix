@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./firefox.nix
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
