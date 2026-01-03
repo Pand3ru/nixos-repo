@@ -5,11 +5,12 @@
     defaultEditor = true;
   };
 
-  home.file.".config/nvim".source = pkgs.fetchFromGithub {
+  # use lib.fakeHash in order to get hash
+  home.file.".config/nvim".source = pkgs.fetchFromGitHub {
     owner = "Pand3ru";
     repo = "nvim-config";
     rev = "61025ed";
-    sha265 = lib.fakeHash;
+    sha256 = "sha256-k5sz7d0ZJi5r1Ap3MVraD8dMm1zda9LlrmX0CgLCsTw=";
   };
 
   # Deps

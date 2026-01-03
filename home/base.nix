@@ -6,7 +6,6 @@
   };
 
   home.packages = with pkgs; [
-	neovim
 	anki-bin
 	signal-desktop
 	bemenu
