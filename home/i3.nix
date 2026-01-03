@@ -85,9 +85,6 @@ in
 
       startup = [
         { command = "${pkgs.pywal}/bin/wal -i ${wallpaper}"; always = true; }
-        { command = "nm-applet"; always = true; }
-        { command = "blueman-applet"; always = true; }
-        { command = "${pkgs.pasystray}/bin/pasystray"; always = true; }
         { command = "${pkgs.feh}/bin/feh --bg-scale ${wallpaper}"; always = true; }
       ];
     };

@@ -23,7 +23,7 @@ in {
       custom = ohMyZshCustom;
     };
 
-    initExtra = ''
+    initContent = ''
       cat ~/.cache/wal/sequences
       clear
     '';

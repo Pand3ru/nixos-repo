@@ -64,6 +64,7 @@
       defaultSession = "xfce+i3";
     };
   };
+
   services.gnome.gnome-keyring.enable = true;
   services.gvfs.enable = true;
   services.blueman.enable = true;

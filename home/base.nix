@@ -20,6 +20,7 @@
 	imagemagick
 	wireguard-tools
 	gnumake
+	cargo
   ];
   # We do this to only have the daemon ran on local user
   services.kdeconnect.enable = true;

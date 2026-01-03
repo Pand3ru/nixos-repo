@@ -6,6 +6,7 @@
 	./i3.nix
 	./theming.nix
 	./i3status.nix
+	./nvim.nix
   ];
   home = {
     packages = with pkgs; [];
