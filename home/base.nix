@@ -10,7 +10,6 @@
 	signal-desktop
 	bemenu
 	firefox
-	git
 	curl
 	feh
 	lxappearance
