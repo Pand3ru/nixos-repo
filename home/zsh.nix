@@ -13,7 +13,7 @@ in {
       gd = "git diff";
       v = "nvim";
       c = "clear";
-      copyDir = "find . -type f -exec sh -c 'for file; do echo "Dateiname: $file"; cat "$file"; done' sh {} + | xclip -selection clipboard";
+      copyDir = "find . -type f -exec sh -c 'for file; do echo \"Dateiname: $file\"; cat \"$file\"; done' sh {} + | xclip -selection clipboard";
     };
 
     enableAutosuggestions = true;
