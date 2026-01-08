@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
 	anki-bin
 	signal-desktop
+    spotify
 	bemenu
 	firefox
 	curl
@@ -19,6 +20,8 @@
 	wireguard-tools
 	gnumake
 	cargo
+    arandr
+    zathura
   ];
   # We do this to only have the daemon ran on local user
   services.kdeconnect.enable = true;

@@ -26,7 +26,7 @@ in {
     };
 
     initContent = ''
-      eval "$(ssh-agent -s)"
+      eval "$(ssh-agent -s)" > /dev/null
       cat ~/.cache/wal/sequences
       clear
     '';
