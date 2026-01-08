@@ -62,9 +62,13 @@
     };
     displayManager = {
       lightdm.enable = true;
-      defaultSession = "xfce+i3";
     };
   };
+
+    services.displayManager = {
+      defaultSession = "xfce+i3";
+    };
+
 
   services.gnome.gnome-keyring.enable = true;
   services.gvfs.enable = true;

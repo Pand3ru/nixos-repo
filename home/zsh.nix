@@ -16,8 +16,8 @@ in {
       copyDir = "find . -type f -exec sh -c 'for file; do echo \"Dateiname: $file\"; cat \"$file\"; done' sh {} + | xclip -selection clipboard";
     };
 
-    enableAutosuggestions = true;
-    enableSyntaxHighlighting = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
 
     oh-my-zsh = {
       enable = true;
