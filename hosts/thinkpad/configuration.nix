@@ -22,6 +22,13 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.initrd.luks.devices = {
+  "luks-1cb09dc0-51ba-4612-944e-1f61e715e553".device =
+    "/dev/disk/by-uuid/1cb09dc0-51ba-4612-944e-1f61e715e553";
+  
+  "luks-0474b0fb-755d-4b08-85ff-704ae655c3bc".device =
+    "/dev/disk/by-uuid/0474b0fb-755d-4b08-85ff-704ae655c3bc";
+};
 
   networking = {
     hostName = "TwinkPad";

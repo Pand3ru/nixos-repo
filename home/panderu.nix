@@ -8,6 +8,7 @@
 	./i3status.nix
 	./nvim.nix
     ./firefox.nix
+    ./git.nix
   ];
   home = {
     packages = with pkgs; [];
