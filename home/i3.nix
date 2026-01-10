@@ -43,7 +43,7 @@ in
         "${mod}+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
         "Mod1+semicolon" = "exec ${pkgs.bemenu}/bin/bemenu-run";
         "${mod}+comma" = "kill";
-        "Mod1+l" = "exec ${pkgs.i3lock}/bin/xflock4";
+        "Mod1+l" = "exec ${pkgs.xfce.xfce4-session}/bin/xflock4";
 
         # === LAYOUT (Super) ===
         "${mod}+f" = "layout toggle tabbed split";
