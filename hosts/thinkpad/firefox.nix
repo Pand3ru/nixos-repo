@@ -30,6 +30,7 @@ in {
         "extensions.pocket.enabled" = lock-false;
         "browser.newtabpage.pinned" = lock-empty-string;
         "browser.topsites.contile.enabled" = lock-false;
+        "browser.toolbars.bookmarks.visibility" = "always";
         "browser.newtabpage.activity-stream.showSponsored" = lock-false;
         "browser.newtabpage.activity-stream.system.showSponsored" = lock-false;
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = lock-false;
@@ -54,6 +55,10 @@ in {
         };
         "{d7742d87-e61d-4b78-b8a1-b469842139fa}" = {
           install_url = "https://addons.mozilla.org/firefox/downloads/file/4618554/vimium_ff-2.3.1.xpi";
+          installation_mode = "force_installed";
+        };
+        "jid1-sirVJT0BXhkuJg@jetpack" = {
+          install_url = "https://addons.mozilla.org/firefox/downloads/file/3853490/premiumizeme-1.0.22.xpi";
           installation_mode = "force_installed";
         };
       };

@@ -8,6 +8,10 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # I hate myself for this...
+  xdg.portal.enable = true;
+  services.flatpak.enable = true;
+
   environment.systemPackages = with pkgs; [
     gnome-keyring
     networkmanagerapplet
@@ -18,6 +22,8 @@
     wget
     i3status
   ];
+
+  services.resolved.enable = true;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

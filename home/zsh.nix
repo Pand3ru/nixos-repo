@@ -12,6 +12,7 @@ in {
       gs = "git status";
       gd = "git diff";
       v = "nvim";
+      vim = "nvim";
       c = "clear";
       copyDir = "find . -type f -exec sh -c 'for file; do echo \"Dateiname: $file\"; cat \"$file\"; done' sh {} + | xclip -selection clipboard";
     };

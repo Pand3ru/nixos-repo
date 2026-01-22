@@ -6,7 +6,7 @@ in
 {
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-     (nerd-fonts.jetbrains-mono)
+    (nerd-fonts.jetbrains-mono)
     libsForQt5.qt5ct
     kdePackages.qt6ct
   ];
