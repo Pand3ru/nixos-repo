@@ -42,6 +42,7 @@ in
         # === ACTIONS (Alt) ===
         "${mod}+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
         "Mod1+semicolon" = "exec ${pkgs.bemenu}/bin/bemenu-run";
+        "${mod}+s" = "exec ${pkgs.flameshot}/bin/flameshot launcher";
         "${mod}+comma" = "kill";
         "Mod1+l" = "exec ${pkgs.xfce.xfce4-session}/bin/xflock4";
 

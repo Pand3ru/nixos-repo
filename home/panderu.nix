@@ -9,6 +9,7 @@
 	./nvim.nix
     ./firefox.nix
     ./git.nix
+    ./mpv.nix
   ];
   home = {
     packages = with pkgs; [];
