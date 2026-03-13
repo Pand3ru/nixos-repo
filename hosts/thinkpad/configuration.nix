@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ./firefox.nix
+    ./power.nix
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -24,6 +25,14 @@
   ];
 
   services.resolved.enable = true;
+  services.devmon.enable = true;
+  services.gvfs = true;
+  services.udisks2.enable = true;
+
+  services.logind = {
+    lidSwitch = "suspend";
+    lidSwitchDocked = "ignore";
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -57,6 +66,10 @@
   networking.firewall = rec {
     allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
     allowedUDPPortRanges = allowedTCPPortRanges;
+  };
+
+  networking.hosts = {
+    "192.168.50.203" = [ "desk.home" ];
   };
 
   programs = {

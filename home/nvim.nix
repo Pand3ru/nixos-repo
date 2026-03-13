@@ -9,8 +9,9 @@
   home.file.".config/nvim".source = pkgs.fetchFromGitHub {
     owner = "Pand3ru";
     repo = "nvim-config";
-    rev = "885ebdb";
-    sha256 = "sha256-3xVRHfGn0171vejFX6UVAPrW82zXDVXAUcshUkS2cNo=";
+    rev = "4b7e2e8";
+    sha256 = "sha256-e9+Mdfq+lcBOQyNpjSCsxVdiylDh7QbVDKcfZDxXQF0=";
+    # sha256 = lib.fakeHash;
   };
 
   # Deps
