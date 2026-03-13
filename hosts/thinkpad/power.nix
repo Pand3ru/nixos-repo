@@ -1,5 +1,6 @@
 { config, pkgs, ... }: 
 {
+  boot.kernelParams = [ "mem_sleep_default=deep" ];
   services = { 
     tlp = {
       enable = true;

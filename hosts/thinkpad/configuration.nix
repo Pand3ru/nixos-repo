@@ -26,12 +26,13 @@
 
   services.resolved.enable = true;
   services.devmon.enable = true;
-  services.gvfs = true;
   services.udisks2.enable = true;
 
-  services.logind = {
-    lidSwitch = "suspend";
-    lidSwitchDocked = "ignore";
+  security.pam.services.xfce4-screensaver.enable = true;
+
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchDocked = "ignore";
   };
 
   boot.loader.systemd-boot.enable = true;

@@ -2,9 +2,11 @@
 {
   programs.git = {
     enable = true;
-    userName = "Pand3ru";
-    userEmail = "github@pankratov.de";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Pand3ru";
+        email = "github@pankratov.de";
+      };
       init.defaultBranch = "main";
     };
   };

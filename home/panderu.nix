@@ -22,4 +22,11 @@
 
   programs.home-manager.enable = true;
   nixpkgs.config.allowUnfree = true;
+
+
+  # Disable XFCE4 power management to not interfere with tlp
+  xdg.configFile."autostart/xfce4-power-manager.desktop".text = ''
+    [Desktop Entry]
+    Hidden=true
+  '';
 }

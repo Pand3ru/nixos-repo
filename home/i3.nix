@@ -67,6 +67,9 @@ in
       startup = [
         { command = "${pkgs.pywal}/bin/wal -i ${wallpaper}"; always = true; }
         { command = "${pkgs.feh}/bin/feh --bg-scale ${wallpaper}"; always = true; }
+        { command = "xset dpms 120 120 180"; always = true; }
+        { command = "${pkgs.xss-lock}/bin/xss-lock -- ${pkgs.xfce.xfce4-screensaver}/bin/xfce4-screensaver-command --lock"; always = true; }
+        { command = "pkill xfce4-power-manager"; always = true; }
       ];
       window.commands = [
         # === MEDIA WORKSPACE ===
