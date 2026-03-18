@@ -10,6 +10,8 @@
     ./firefox.nix
     ./git.nix
     ./mpv.nix
+
+    ./dunst.nix
   ];
   home = {
     packages = with pkgs; [];

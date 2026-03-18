@@ -12,23 +12,62 @@
 
   outputs = { self, nixpkgs, home-manager, ... }:
   let
-    lib = nixpkgs.lib;
     system = "x86_64-linux";
-  in {
-    nixosConfigurations.thinkpad =
-      nixpkgs.lib.nixosSystem {
-        inherit system;
+    lib = nixpkgs.lib;
 
-	modules = [
-	  ./hosts/thinkpad/configuration.nix
-	  ./hosts/thinkpad/hardware-configuration.nix
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
 
-	  home-manager.nixosModules.home-manager
-	  {
-	    home-manager.users.panderu =
-	      import ./home/panderu.nix;
-	  }
-	];
+    commonShellHook = ''
+      export IN_NIX_SHELL=1
+    
+      if [ -n "$PS1" ]; then
+        export PS1="(nix) $PS1"
+      fi
+    
+      parent_shell="$(ps -p $PPID -o comm=)"
+    
+      current_shell="$(ps -p $$ -o comm=)"
+    
+      if [ "$parent_shell" != "$current_shell" ]; then
+        exec "$(command -v "$parent_shell")"
+      fi
+    '';
+
+    mkDevShell = packages: pkgs.mkShell {
+      inherit packages;
+      shellHook = commonShellHook;
+    };
+
+  in
+  {
+    nixosConfigurations.thinkpad = lib.nixosSystem {
+      inherit system;
+
+      modules = [
+        ./hosts/thinkpad/configuration.nix
+        ./hosts/thinkpad/hardware-configuration.nix
+
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.users.panderu =
+            import ./home/panderu.nix;
+        }
+      ];
+    };
+
+    devShells.${system} = {
+      rust = mkDevShell (with pkgs; [
+        gcc
+        gnumake
+        pkg-config
+        rustPackages.rustc
+        rustPackages.cargo
+        rust-analyzer
+        rustfmt
+      ]);
     };
   };
 }
