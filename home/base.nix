@@ -1,26 +1,19 @@
 { config, pkgs, ...}:
 {
   home.sessionVariables = {
-    XDG_CURRENT_DESKTOP = "i3";
     SHELL = "${pkgs.zsh}/bin/zsh";
+    NIXOS_OZONE_WL = "1";
   };
 
   home.packages = with pkgs; [
 	anki-bin
 	signal-desktop
     spotify
-	bemenu
-	firefox
 	curl
-	feh
-	lxappearance
-	xfce.xfce4-settings
-	pywal
 	imagemagick
 	wireguard-tools
 	gnumake
 	cargo
-    arandr
     zathura
     filezilla
     vlc
@@ -29,10 +22,9 @@
     bitwarden-desktop 
     thunderbird
     zotero
-    xss-lock
-    xfce.thunar-volman
     zed-editor
   ];
+
   # We do this to only have the daemon ran on local user
-  services.kdeconnect.enable = true;
+  #services.kdeconnect.enable = true;
 }

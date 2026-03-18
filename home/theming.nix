@@ -7,8 +7,6 @@ in
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
     (nerd-fonts.jetbrains-mono)
-    libsForQt5.qt5ct
-    kdePackages.qt6ct
   ];
 
   gtk = {
@@ -20,17 +18,6 @@ in
     theme = {
       name = "Adwaita-dark";
     };
-  };
-
-  home.sessionVariables.QT_QPA_PLATFORMTHEME = "qt5ct";
-
-  xresources.properties = {
-    "Xft.dpi" = 96;
-    "Xft.antialias" = 1;
-    "Xft.hinting" = 1;
-    "Xft.hintstyle" = "hintfull";
-    "Xft.rgba" = "rgb";
-    "Xft.autohint" = 0;
   };
 
   programs.alacritty = {
@@ -65,6 +52,4 @@ in
       };
     };
   };
-
-  home.sessionVariables.I3FONT = "${fontName}:size=${toString fontSize}";
 }

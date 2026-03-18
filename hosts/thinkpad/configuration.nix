@@ -4,31 +4,33 @@
   imports = [
     ./hardware-configuration.nix
     ./firefox.nix
-    ./power.nix
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
+
   # I hate myself for this...
-  xdg.portal.enable = true;
   services.flatpak.enable = true;
+
+  services.power-profiles-daemon.enable = true;
 
   environment.systemPackages = with pkgs; [
     gnome-keyring
-    networkmanagerapplet
     unzip
     unrar
-    polkit_gnome
     vim
     wget
-    i3status
   ];
 
   services.resolved.enable = true;
   services.devmon.enable = true;
   services.udisks2.enable = true;
 
-  security.pam.services.xfce4-screensaver.enable = true;
+  services.displayManager.defaultSession = "gnome";
 
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";
@@ -83,29 +85,12 @@
     };
   };
 
-  services.xserver = {
-    enable = true;
-    xkb.layout = "us";
-    xkb.variant = "";
-    windowManager.i3.enable = true;
-    desktopManager.xfce = {
-      enable = true;
-      noDesktop = true;
-      enableXfwm = false;
-    };
-    displayManager = {
-      lightdm.enable = true;
-    };
-  };
-
-    services.displayManager = {
-      defaultSession = "xfce+i3";
-    };
-
-
   services.gnome.gnome-keyring.enable = true;
   services.gvfs.enable = true;
   services.blueman.enable = true;
+
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   services.pipewire = {
     enable = true;
