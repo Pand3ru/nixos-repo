@@ -64,7 +64,6 @@ in {
         "{20fc2e06-e3e4-4b2b-812b-ab431220cada}" = {
           install_url = "https://addons.mozilla.org/firefox/downloads/file/4416483/startpage_private_search-2.0.3.xpi";
           installation_mode = "force_installed";
-
         };
       };
     };

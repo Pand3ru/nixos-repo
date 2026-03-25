@@ -5,21 +5,31 @@
   home.file."wallpaper.png".source = ../assets/wallpaper.png;
 
   home.packages = with pkgs; [
-    gnomeExtensions.pop-shell
     gnomeExtensions.blur-my-shell
     gnomeExtensions.just-perfection
-    gnomeExtensions.workspace-grid
     gnomeExtensions.gsconnect
+    gnomeExtensions.pop-shell
   ];
+
+  home.file.".config/mimeapps.list" = {
+    text = ''
+      [Default Applications]
+      x-scheme-handler/http=firefox.desktop
+      x-scheme-handler/https=firefox.desktop
+      text/html=firefox.desktop
+      x-scheme-handler/mailto=thunderbird.desktop
+      application/vnd.ms-outlook=thunderbird.desktop
+    '';
+    force = true; 
+  };
 
   dconf.settings = {
   "org/gnome/shell" = {
     disable-user-extensions = false;
     enabled-extensions = [
-      "pop-shell@system76.com"
+      "pop-shell@System76"
       "blur-my-shell@aunetx"
       "just-perfection-desktop@just-perfection"
-      "workspace-grid@mathematical.coffee.gmail.com"
       "gsconnect@andyholmes.github.io"
     ];
   };
@@ -28,6 +38,28 @@
     picture-uri = "file:///home/panderu/wallpaper.png";
     picture-uri-dark = "file:///home/panderu/wallpaper.png";
     picture-options = "zoom";
+  };
+
+  "org/gnome/desktop/peripherals/mouse" = {
+    natural-scroll = false;
+  };
+
+  "org/gnome/shell/extensions/pop-shell" = {
+    tile-by-default = false;
+    active-hint = false; 
+    show-decoration = false;
+  };
+  
+  "org/gnome/desktop/peripherals/touchpad" = {
+    natural-scroll = false;
+  };
+
+  "org/gnome/mutter" = {
+    dynamic-workspaces = false;
+  };
+  
+  "org/gnome/desktop/wm/preferences" = {
+    num-workspaces = 4;
   };
 
   "org/gnome/desktop/wm/keybindings" = {
@@ -44,11 +76,29 @@
     # Remove defaults
     switch-applications = [ ];
     switch-windows = [ ];
+
+    close = [ "<Super>," ];
+    minimize = [ "" ];
+    toggle-maximized = [ "<Super>f" ];
+    toggle-fullscreen = [ "" ];
+    show-desktop = [ "" ];
   };
 
-  "org/gnome/shell/extensions/pop-shell" = {
-    tile-by-default = true;
-    active-hint = true;
+  "org/gnome/settings-daemon/plugins/media-keys" = {
+    screensaver = [ "<Alt>l" ];
+    terminal = [ "<Super>Return" ]; 
+    home = [ "" ];
+    www = [ "" ];
+    email = [ "" ];
+    calculator = [ "" ];
+  };
+
+  "org/gnome/shell/extensions/just-perfection" = {
+    hide-window-titlebars = true;
+  };
+
+  "org/gnome/desktop/interface" = {
+    color-scheme = "prefer-dark";
   };
 };
 

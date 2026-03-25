@@ -7,7 +7,17 @@ in
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
     (nerd-fonts.jetbrains-mono)
+    adwaita-icon-theme
   ];
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+
+    package = pkgs.adwaita-icon-theme;
+    name = "Adwaita";
+    size = 24;
+  };
 
   gtk = {
     enable = true;
@@ -24,7 +34,7 @@ in
     enable = true;
     settings = {
       window = {
-        opacity = 0.8;
+        opacity = 1.0;
         padding = {
           x = 10;
           y = 10;

@@ -40,17 +40,33 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.initrd.luks.devices = {
   "luks-1cb09dc0-51ba-4612-944e-1f61e715e553".device =
     "/dev/disk/by-uuid/1cb09dc0-51ba-4612-944e-1f61e715e553";
   
   "luks-0474b0fb-755d-4b08-85ff-704ae655c3bc".device =
     "/dev/disk/by-uuid/0474b0fb-755d-4b08-85ff-704ae655c3bc";
-};
+  };
 
   networking = {
     hostName = "TwinkPad";
     networkmanager.enable = true;
+  };
+
+  # Fix trackpad not working after hibernation
+  systemd.services.fix-trackpad-resume = {
+    description = "Rebind Elan trackpad after resume";
+    after = [ "post-resume.target" ];
+    wantedBy = [ "post-resume.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "fix-trackpad" ''
+        echo "0-0015" > /sys/bus/i2c/drivers/elan_i2c/unbind || true
+        sleep 0.5
+        echo "0-0015" > /sys/bus/i2c/drivers/elan_i2c/bind || true
+      '';
+    };
   };
 
   # User
