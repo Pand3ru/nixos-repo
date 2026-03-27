@@ -4,13 +4,6 @@
 
   home.file."wallpaper.png".source = ../assets/wallpaper.png;
 
-  home.packages = with pkgs; [
-    gnomeExtensions.blur-my-shell
-    gnomeExtensions.just-perfection
-    gnomeExtensions.gsconnect
-    gnomeExtensions.pop-shell
-  ];
-
   home.file.".config/mimeapps.list" = {
     text = ''
       [Default Applications]

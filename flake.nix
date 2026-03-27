@@ -10,64 +10,40 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
     lib = nixpkgs.lib;
-
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
     };
 
-    commonShellHook = ''
-      export IN_NIX_SHELL=1
-    
-      if [ -n "$PS1" ]; then
-        export PS1="(nix) $PS1"
-      fi
-    
-      parent_shell="$(ps -p $PPID -o comm=)"
-    
-      current_shell="$(ps -p $$ -o comm=)"
-    
-      if [ "$parent_shell" != "$current_shell" ]; then
-        exec "$(command -v "$parent_shell")"
-      fi
-    '';
+    helpers = import ./util/helpers.nix { inherit  nixpkgs home-manager; };
+        
+    thinkpad = {
+      name = "thinkpad";
+      hostname = "ThinkPad";
+      systemSettings = helpers.newSystemSettings {
+        hostname = "TwinkPad";
+      };
 
-    mkDevShell = packages: pkgs.mkShell {
-      inherit packages;
-      shellHook = commonShellHook;
+      userSettings = helpers.newUserSettings { };
+      inherit inputs;
+      inherit helpers;
     };
 
-  in
-  {
-    nixosConfigurations.thinkpad = lib.nixosSystem {
-      inherit system;
+    nixosName = config: "${config.name}";
+    homeName = config: "${config.name}@${config.userSettings.username}";
 
-      modules = [
-        ./hosts/thinkpad/configuration.nix
-        ./hosts/thinkpad/hardware-configuration.nix
-
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.users.panderu =
-            import ./home/panderu.nix;
-        }
-      ];
+    mkSysCfg = config: {
+        nixosConfigurations."${nixosName config}" = (helpers.newSystemConfig config);
     };
+    mkAllCfg = config: {
+        homeConfigurations."${homeName config}" = (helpers.newHomeMMConfig config);
+    } // (mkSysCfg config);
 
-    devShells.${system} = {
-      rust = mkDevShell (with pkgs; [
-        gcc
-        gnumake
-        pkg-config
-        rustPackages.rustc
-        rustPackages.cargo
-        rust-analyzer
-        rustfmt
-      ]);
-    };
-  };
+  in lib.foldr lib.attrsets.recursiveUpdate {} [
+    (mkAllCfg thinkpad)
+  ];
 }
