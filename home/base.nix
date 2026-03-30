@@ -3,6 +3,7 @@
   home.sessionVariables = {
     SHELL = "${pkgs.zsh}/bin/zsh";
     NIXOS_OZONE_WL = "1";
+    MOZ_LEGACY_PROFILES = "1";
   };
 
   home.packages = with pkgs; [

@@ -26,6 +26,7 @@
       hostname = "ThinkPad";
       systemSettings = helpers.newSystemSettings {
         hostname = "TwinkPad";
+        useHMasModule = true;
       };
 
       userSettings = helpers.newUserSettings { };
@@ -39,9 +40,12 @@
     mkSysCfg = config: {
         nixosConfigurations."${nixosName config}" = (helpers.newSystemConfig config);
     };
-    mkAllCfg = config: {
-        homeConfigurations."${homeName config}" = (helpers.newHomeMMConfig config);
-    } // (mkSysCfg config);
+    mkAllCfg = config:
+      (mkSysCfg config)
+      // lib.optionalAttrs (!config.systemSettings.useHMasModule) {
+        homeConfigurations."${homeName config}" =
+          helpers.newHMConfig config;
+      };
 
   in lib.foldr lib.attrsets.recursiveUpdate {} [
     (mkAllCfg thinkpad)

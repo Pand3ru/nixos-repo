@@ -1,6 +1,6 @@
 let 
-  sep = "seperator"
-  b = n: u: t ? []: { name = n; url = u; tags = t; };
+  sep = "separator";
+  b = n: u: t: { name = n; url = u; tags = t; };
 in
 {
   name = "Bookmarks";
@@ -10,7 +10,6 @@ in
       name = "Dev";
       bookmarks = [
         (b "GitHub" "https://github.com/" [ "code" "repo" ])
-
         {
           name = "Rust";
           bookmarks = [
@@ -68,9 +67,9 @@ in
     {
       name = "Media";
       bookmarks = [
-        (b "r/Piracy Megathread" "https://www.reddit.com/r/Piracy/wiki/megathread/")
-        (b "RealDebrid" "https://real-debrid.com/")
-        (b "Premiumize" "https://www.premiumize.me/")
+        (b "r/Piracy Megathread" "https://www.reddit.com/r/Piracy/wiki/megathread/" [])
+        (b "RealDebrid" "https://real-debrid.com/" [])
+        (b "Premiumize" "https://www.premiumize.me/" [])
         sep
         {
           name = "Stream";
@@ -91,6 +90,22 @@ in
           ];
         }
       ];
+    }
+
+    {
+      name = "Playback";
+      bookmarks = let
+      sus = speed: builtins.substring 0 4 (toString speed);
+
+      pb = speed: "javascript:(function(){document.getElementsByTagName('video')[0].playbackRate = ${sus speed}})()";
+      pbb = speed: (b "Set to ${sus speed}x speed" (pb speed) ["javascript" "utility"]);
+      in
+        map (s: pbb s) ([]
+          ++ [0.05 0.10 0.15]
+          ++ [1.00 1.25 1.50 1.75]
+          ++ [2.00 2.25 2.50 2.75]
+          ++ [3.00 3.25 3.50]
+          ++ [4.00 4.25 4.50]);
     }
   ];
 }

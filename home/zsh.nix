@@ -16,6 +16,9 @@ in {
 
     initContent = ''
       cat ~/.cache/wal/sequences
+      if [[ -z $ZELLIJ ]]; then
+          zellij
+      fi
       clear
     '';
   };

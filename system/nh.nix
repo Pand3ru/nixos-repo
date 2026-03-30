@@ -2,7 +2,7 @@
 {
   programs.nh = {
     enable = true;
-    flake = userSettings.dotfilesDir;
+    flake = userSettings.installationPath;
     clean = {
       enable = true;
       dates = "weekly";

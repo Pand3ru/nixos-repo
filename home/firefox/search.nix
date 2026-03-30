@@ -1,7 +1,7 @@
 {
   force = true;
   default = "Startpage";
-  order = [ "Startpage" "ddg" "google" ];
+  order = [ "Startpage" "DuckDuckGo" "Google" ]; 
   engines = {
     "Nix Packages" = {
         urls = [{
@@ -11,6 +11,7 @@
                 { name = "query"; value = "{searchTerms}"; }
             ];
         }];
+        iconUpdateURL = "https://nixos.org/favicon.png";
         definedAliases = [ "@np" ];
     };
 
@@ -22,6 +23,7 @@
                 { name = "query"; value = "{searchTerms}"; }
             ];
         }];
+        iconUpdateURL = "https://nixos.org/favicon.png"; 
         definedAliases = [ "@no" ];
     };
 
@@ -31,8 +33,9 @@
             params = [
                 { name = "query"; value = "{searchTerms}"; }
             ];
-            definedAliases = [ "@sp" ];
         }];
+        iconUpdateURL = "https://www.startpage.com/sp/cdn/favicons/favicon-256-a199a0cb.png"; 
+        definedAliases = [ "@sp" ]; 
     };
 
     "bing".metaData.hidden = true;

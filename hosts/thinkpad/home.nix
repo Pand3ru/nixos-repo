@@ -1,6 +1,5 @@
 { config, pkgs, userSettings, ...}:
 {
-  # TODO: fix pathing
   imports = [
 	../../home/base.nix
 	../../home/zsh.nix
@@ -14,8 +13,8 @@
     ../../home/thunderbird.nix
   ];
 
-  home.username = userSettings.name;
-  home.homeDirectory = "/home/"+userSettings.name;
+  home.username = userSettings.username;
+  home.homeDirectory = "/home/"+userSettings.username;
 
   nixpkgs.config.allowUnfree = true;
   programs.home-manager.enable = true;

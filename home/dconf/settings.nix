@@ -2,7 +2,11 @@
 {
   dconf.enable = true;
 
-  home.file."wallpaper.png".source = ../assets/wallpaper.png;
+  home.packages = with pkgs; [
+    wl-clipboard
+  ];
+
+  home.file."wallpaper.png".source = ../../assets/wallpaper.png;
 
   home.file.".config/mimeapps.list" = {
     text = ''
