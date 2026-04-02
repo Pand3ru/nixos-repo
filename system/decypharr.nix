@@ -18,6 +18,11 @@ in
     };
   };
 
+  systemd.tmpfiles.rules = [
+    "d /mnt/remote 0755 decypharr decypharr - -"
+    "d /mnt/remote/realdebrid 0755 decypharr decypharr - -"
+  ];
+
   # After setup this might not be needed. Since I version lock this service anyway, I could just take the json and export it instead.
   networking.firewall = {
     allowedTCPPorts = [ 8282 ];
