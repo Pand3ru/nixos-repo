@@ -18,20 +18,18 @@ in
       Restart = "on-failure";
       DeviceAllow = [ "/dev/fuse" ];
       AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
-      SupplementaryGroups = [ "fuse" "media" ];
+      SupplementaryGroups = [ "fuse" ];
     };
   };
 
   users.users.decypharr = {
     isSystemUser = true;
     group = "decypharr";
-    extraGroups = [ "fuse" "media" ];
+    extraGroups = [ "fuse" ];
   };
-  users.users.sonarr.extraGroups = [ "media" ];
 
   users.groups.decypharr = {};
   users.groups.fuse = {};
-  users.groups.media = {};
 
   programs.fuse.userAllowOther = true;
   boot.kernelModules = [ "fuse" ];
@@ -40,7 +38,7 @@ in
     "d /mnt/remote 0755 decypharr decypharr - -"
     "d /mnt/remote/realdebrid 0755 decypharr decypharr - -"
     "d /var/lib/decypharr 0755 decypharr decypharr - -"
-    "d /mnt/media2/dl 0775 sonarr media - -"
+    "d /mnt/media2/dl 0775 decypharr decypharr - -"
   ];
 
   networking.firewall = {
