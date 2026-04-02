@@ -5,8 +5,11 @@
     allowedTCPPorts = [ 80 443 ];
   };
 
+  users.users.nginx.extraGroups = [ "acme" ];
+
   services.nginx = {
     enable = true;
+    user = "nginx";
 
     # Use recommended settings
     recommendedGzipSettings = true;
@@ -53,6 +56,11 @@
 
   security.acme = {
     acceptTerms = true;
-    defaults.email = "acme@pankratov.de";
+    defaults = {
+      email = "acme@pankratov.de";
+      enableDebugLogs = true;
+      server = "https://acme-v02.api.letsencrypt.org/directory";
+      group = "nginx";
+    };
   };
 }

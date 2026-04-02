@@ -9,13 +9,9 @@ in
     copyparty.nixosModules.default
   ];
 
-  services.nginx.virtualHosts."cloud.panderu.org" =  {
-    enableACME = true;
-    forceSSL = true;
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:3923";
-    };
-  };
+  services.caddy.virtualHosts."cloud.panderu.org".extraConfig = ''
+    reverse_proxy 127.0.0.1:3923
+  '';
 
   # Add the copyparty overlay to expose the package
   nixpkgs.overlays = [ copyparty.overlays.default ];

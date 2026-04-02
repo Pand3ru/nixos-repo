@@ -30,7 +30,7 @@ in
     ../../system/sonarr.nix
     ../../system/whisparr.nix
     # Web 
-    ../../system/nginx.nix
+    ../../system/caddy.nix
     ../../system/copyparty.nix
     ../../system/desk.nix
     ../../system/vaultwarden.nix
