@@ -27,6 +27,9 @@ in
     group = "decypharr";
     extraGroups = [ "fuse" ];
   };
+
+  programs.fuse.userAllowOther = true;
+
   users.groups.decypharr = {};
   users.groups.fuse = {};
   boot.kernelModules = [ "fuse" ];
