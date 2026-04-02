@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 let
   decypharr = pkgs.callPackage ../pkgs/decypharr.nix {};
 in
@@ -8,34 +7,37 @@ in
     description = "Decypharr";
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
-
     serviceConfig = {
       ExecStart = "${decypharr}/bin/decypharr --config /var/lib/decypharr";
       StateDirectory = "decypharr";
       WorkingDirectory = "/var/lib/decypharr";
-      DynamicUser = true;
+      DynamicUser = false;
+      User = "decypharr";
+      Group = "decypharr";
       Restart = "on-failure";
+      DeviceAllow = [ "/dev/fuse" ];
+      AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
+      SupplementaryGroups = [ "fuse" ];
     };
   };
 
-  boot.kernelModules = [ "fuse" ];
-
-  users.groups.fuse = {};
-
-  systemd.services.decypharr.serviceConfig = {
-    DeviceAllow = [ "/dev/fuse" ];
-    AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
-    SupplementaryGroups = [ "fuse" ];
+  users.users.decypharr = {
+    isSystemUser = true;
+    group = "decypharr";
+    extraGroups = [ "fuse" ];
   };
+  users.groups.decypharr = {};
+  users.groups.fuse = {};
+  boot.kernelModules = [ "fuse" ];
 
   systemd.tmpfiles.rules = [
     "d /mnt/remote 0755 decypharr decypharr - -"
     "d /mnt/remote/realdebrid 0755 decypharr decypharr - -"
+    "d /var/lib/decypharr 0755 decypharr decypharr - -"
   ];
 
-  # After setup this might not be needed. Since I version lock this service anyway, I could just take the json and export it instead.
   networking.firewall = {
     allowedTCPPorts = [ 8282 ];
-    allowedUDPPorts = [ 8282 ]; # Idk if they use UDP but just to be safe :)
+    allowedUDPPorts = [ 8282 ];
   };
 }
