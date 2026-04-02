@@ -25,7 +25,7 @@ in
 
   boot.kernelModules = [ "fuse" ];
 
-  users.users.decypharr.extraGroups = [ "fuse" ];
+  users.users.decypharr.group = "fuse";
 
   systemd.tmpfiles.rules = [
     "d /mnt/remote 0755 decypharr decypharr - -"
