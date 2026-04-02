@@ -38,6 +38,7 @@ in
     "d /mnt/remote 0755 decypharr decypharr - -"
     "d /mnt/remote/realdebrid 0755 decypharr decypharr - -"
     "d /var/lib/decypharr 0755 decypharr decypharr - -"
+    "d /mnt/media2/dl 0775 sonarr sonarr - -"
   ];
 
   networking.firewall = {
