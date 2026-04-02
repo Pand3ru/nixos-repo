@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  serivices.nginx.virtualHosts = {
+  serivices.nginx.virtualHosts."vw.panderu.org" = {
     enableACME = true;
     forceSSL = true;
     locations."/" = {

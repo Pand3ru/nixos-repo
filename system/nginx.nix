@@ -2,7 +2,7 @@
 { config, lib, ... }:
 {
   networking.firewall = {
-    allowTCPPorts = [ 80 443 ];
+    allowedTCPPorts = [ 80 443 ];
   };
 
   services.nginx = {
