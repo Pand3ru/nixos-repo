@@ -20,11 +20,13 @@
 
     copyparty-panderu = {
       file = ../secrets/copyparty_panderu.age;
+      owner = "copyparty";
       mode = "0400";
     };
 
     copyparty-other = {
       file = ../secrets/copyparty_other.age;
+      owner = "copyparty";
       mode = "0400";
     };
 
