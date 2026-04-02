@@ -21,7 +21,6 @@
     ];
     serviceConfig = {
       NetworkNamespacePath = "/var/run/netns/vpn";
-      ExecStartPre = "/etc/vpn-check.sh";
     };
   };
 }

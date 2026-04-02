@@ -1,13 +1,4 @@
 { pkgs, ...}:
-let
-  vpnCheck = pkgs.writeShellScript "check-vpn" ''
-    ${pkgs.iproute2}/bin/ip netns exec vpn \
-      ${pkgs.iproute2}/bin/ip link show outbound_vpn | grep -q "UP" || exit 1
-  
-    ${pkgs.iproute2}/bin/ip netns exec vpn \
-      ${pkgs.iproute2}/bin/ip route | grep -q "default dev outbound_vpn" || exit 1
-'';
-in
 {
   # Creates network namespace
   systemd.services."netns@vpn" = {
@@ -40,5 +31,4 @@ in
       '';
     };
   };
-  environment.etc."vpn-check.sh".source = vpnCheck;
 }
