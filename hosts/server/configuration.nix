@@ -18,6 +18,7 @@ in
     ../../system/restic-backups.nix
     # Networking
     ../../system/ddns.nix
+    ../../system/dnsmasq.nix
     ../../system/firewall.nix
     ../../system/wireguard.nix
     ../../system/netns-vpn.nix

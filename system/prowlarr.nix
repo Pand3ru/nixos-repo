@@ -4,6 +4,10 @@
     openFirewall = false;
   };
 
+    services.caddy.virtualHosts."http://prowlarr.home".extraConfig = ''
+      reverse_proxy 192.168.100.1:9696
+    '';
+
   systemd.services.prowlarr = {
     bindsTo = [
       "netns@vpn.service"
