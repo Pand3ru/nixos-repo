@@ -7,6 +7,7 @@ in
     description = "Decypharr";
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
+    path = [ pkgs.rclone pkgs.fuse ];
     serviceConfig = {
       ExecStart = "${decypharr}/bin/decypharr --config /var/lib/decypharr";
       StateDirectory = "decypharr";
