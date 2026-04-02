@@ -1,4 +1,4 @@
-.PHONY: build update gc rs
+.PHONY: build update gc rs agenix
 
 rs:
 	sudo nix-env --delete-generations +5
@@ -13,3 +13,6 @@ update:
 
 gc:
 	sudo nix-collect-garbage -d
+
+agenix:
+	nix shell github:ryantm/agenix

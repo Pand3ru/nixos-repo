@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 {
   imports = [
     ./hardware-configuration.nix
@@ -21,7 +20,15 @@
     ../../system/man.nix
     ../../system/sudo.nix
     ../../system/printing.nix
+
+    # I am still looking for reasons. Until then, no
+    #../../system/ssh.nix 
   ];
+
+  networking.firewall = rec {
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = allowedTCPPortRanges;
+  };
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

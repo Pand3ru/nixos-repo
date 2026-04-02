@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0d0d;
+      --surface:  #141414;
+      --border:   #222;
+      --accent:   #c8ff00;
+      --muted:    #444;
+      --text:     #e8e8e8;
+      --text-dim: #555;
+      --danger:   #ff4040;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      gap: 24px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+    header { text-align: center; }
+    header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 6rem);
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: 0.15em;
+    }
+    header p {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    #config-panel {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .config-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .field input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      padding: 8px 10px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .field input:focus { border-color: var(--accent); }
+
+    .btn-connect {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      padding: 10px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-connect:hover { opacity: 0.85; }
+
+    #main {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+      max-width: 480px;
+    }
+    #main.visible { display: flex; }
+
+    .conn-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .conn-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .conn-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .conn-actions { display: flex; gap: 16px; }
+    .btn-top {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+    .btn-top:hover { color: var(--text); }
+    .btn-top.active { color: var(--accent); }
+
+    .height-display { text-align: center; }
+    .height-display .value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 15vw, 7rem);
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .height-display .value.moving { color: #fff; }
+    .height-display .unit {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+    .height-display .status {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.25em;
+      margin-top: 4px;
+      min-height: 1em;
+    }
+
+    .goto-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2px;
+      width: 100%;
+    }
+    .goto-row input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      padding: 16px 20px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .goto-row input:focus { border-color: var(--accent); }
+    .goto-row input::placeholder { color: var(--muted); }
+    .goto-row button {
+      background: var(--accent);
+      border: none;
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
+      padding: 16px 24px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .goto-row button:hover { opacity: 0.85; }
+
+    .section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      align-self: flex-start;
+    }
+
+    .profiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      width: 100%;
+    }
+    .profile-slot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .profile-slot:hover { border-color: #333; }
+    .profile-slot.set:hover { border-color: var(--accent); }
+    .profile-slot .name {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .profile-slot .profile-mm {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .profile-slot.set .profile-mm { color: var(--accent); }
+    .profile-slot .profile-mm.empty { color: var(--muted); font-size: 1rem; }
+    .profile-slot .save-btn {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      padding: 3px 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.15s;
+    }
+    .profile-slot .save-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+      width: 100%;
+    }
+    .btn-sm {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-sm:hover { color: var(--text); border-color: #333; }
+    .btn-sm.danger { color: var(--danger); }
+    .btn-sm.danger:hover { border-color: var(--danger); }
+    .btn-sm.active-lock { color: var(--accent); border-color: var(--accent); }
+
+    /* Settings */
+    #settings-panel {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+    #settings-panel.visible { display: flex; }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .setting-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .setting-item label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .setting-item .cur {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .setting-item input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      padding: 6px 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .setting-item input:focus { border-color: var(--accent); }
+    .setting-item input::placeholder { color: var(--muted); }
+
+    .btn-apply {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      padding: 12px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      width: 100%;
+    }
+    .btn-apply:hover { opacity: 0.85; }
+
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      padding: 10px 20px;
+      opacity: 0;
+      transition: all 0.2s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.error { border-color: var(--danger); color: var(--danger); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>DESK</h1>
+  <p>Standing Desk Controller</p>
+</header>
+
+<div id="config-panel">
+  <div class="config-row">
+    <div class="field">
+      <label for="desk-username">ESP IP Address</label>
+      <input id="desk-username" name="username" type="text" autocomplete="username" placeholder="192.168.50.94" />
+    </div>
+    <div class="field">
+      <label for="desk-password">API Key</label>
+      <input id="desk-password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+    </div>
+  </div>
+  <button class="btn-connect" onclick="connect()">CONNECT</button>
+</div>
+
+<div id="main">
+  <div class="conn-row">
+    <div>
+      <span class="conn-dot"></span>
+      <span class="conn-label">connected</span>
+    </div>
+    <div class="conn-actions">
+      <button class="btn-top" id="btn-settings-toggle" onclick="toggleSettings()">settings</button>
+      <button class="btn-top" onclick="disconnect()">disconnect</button>
+    </div>
+  </div>
+
+  <!-- Control -->
+  <div id="control-view" style="display:flex;flex-direction:column;align-items:center;gap:24px;width:100%;">
+    <div class="height-display">
+      <div class="value" id="height-val">—</div>
+      <div class="unit">millimeters</div>
+      <div class="status" id="status-text"></div>
+    </div>
+
+    <div class="goto-row">
+      <input id="inp-goto" type="number" placeholder="735 – 1235"
+        onkeydown="if(event.key==='Enter') gotoMm()" />
+      <button onclick="gotoMm()">GO</button>
+    </div>
+
+    <span class="section-label">Profiles</span>
+    <div class="profiles" id="profiles-grid"></div>
+
+    <div class="bottom-row">
+      <button class="btn-sm" onclick="calibrate()">Calibrate</button>
+      <button class="btn-sm" id="btn-lock" onclick="toggleLock()">Lock</button>
+      <button class="btn-sm danger" onclick="stopDesk()">Stop</button>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div id="settings-panel">
+    <span class="section-label">Current Parameters</span>
+    <div class="settings-grid">
+      <div class="setting-item">
+        <label>Up ms/mm</label>
+        <div class="cur" id="cfg-up-display">—</div>
+      </div>
+      <div class="setting-item">
+        <label>Down ms/mm</label>
+        <div class="cur" id="cfg-down-display">—</div>
+      </div>
+      <div class="setting-item">
+        <label>Travel mm</label>
+        <div class="cur" id="cfg-travel-display">—</div>
+      </div>
+      <div class="setting-item">
+        <label>Current mm</label>
+        <div class="cur" id="cfg-current-display">—</div>
+      </div>
+    </div>
+
+    <span class="section-label">Update Speed</span>
+    <div class="settings-grid">
+      <div class="setting-item">
+        <label>Total ms up</label>
+        <input id="cfg-up-ms" type="number" placeholder="e.g. 21230" />
+      </div>
+      <div class="setting-item">
+        <label>Total ms down</label>
+        <input id="cfg-down-ms" type="number" placeholder="e.g. 18300" />
+      </div>
+      <div class="setting-item" style="grid-column: span 2;">
+        <label>Travel mm</label>
+        <input id="cfg-travel-mm" type="number" placeholder="e.g. 500" />
+      </div>
+    </div>
+    <button class="btn-apply" onclick="applyConfig()">APPLY</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  let esp = '', key = '';
+  let currentMm = null;
+  let isLocked  = false;
+  let pollTimer = null;
+  let showingSettings = false;
+
+  const PROFILES_KEY = 'desk_profiles';
+  let profiles = JSON.parse(localStorage.getItem(PROFILES_KEY) || 'null') || [
+    { name: 'Sitting',   mm: null },
+    { name: 'Standing',  mm: null },
+    { name: 'Profile 3', mm: null },
+    { name: 'Profile 4', mm: null },
+  ];
+
+  async function api(path, method = 'GET') {
+    const res = await fetch(`http://${esp}${path}`, {
+      method,
+      headers: { 'X-API-Key': key }
+    });
+    if (!res.ok) throw new Error(`${res.status}`);
+    return res.text();
+  }
+
+  async function connect() {
+    esp = document.getElementById('desk-username').value.trim();
+    key = document.getElementById('desk-password').value.trim();
+    if (!esp || !key) { toast('Enter IP and API key', true); return; }
+    try {
+      const pos = await api('/position');
+      currentMm = parseFloat(pos);
+      localStorage.setItem('desk_ip',  esp);
+      localStorage.setItem('desk_key', key);
+      showMain();
+      toast('Connected');
+    } catch(e) { toast('Connection failed', true); }
+  }
+
+  function disconnect() {
+    clearInterval(pollTimer);
+    document.getElementById('main').classList.remove('visible');
+    document.getElementById('config-panel').style.display = 'flex';
+    esp = ''; key = '';
+  }
+
+  function showMain() {
+    document.getElementById('config-panel').style.display = 'none';
+    document.getElementById('main').classList.add('visible');
+    updateHeightDisplay();
+    renderProfiles();
+    pollTimer = setInterval(pollPosition, 2000);
+  }
+
+  async function pollPosition() {
+    try {
+      const pos = await api('/position');
+      currentMm = parseFloat(pos);
+      updateHeightDisplay();
+      if (showingSettings) document.getElementById('cfg-current-display').textContent = Math.round(currentMm);
+    } catch(e) {}
+  }
+
+  function updateHeightDisplay() {
+    document.getElementById('height-val').textContent = currentMm !== null ? Math.round(currentMm) : '—';
+  }
+
+  function setStatus(txt, moving = false) {
+    document.getElementById('status-text').textContent = txt;
+    document.getElementById('height-val').classList.toggle('moving', moving);
+  }
+
+  async function gotoMm() {
+    const inp = document.getElementById('inp-goto');
+    const mm  = parseInt(inp.value);
+    if (isNaN(mm)) { toast('Enter a value in mm', true); return; }
+    if (mm < 735 || mm > 1235) { toast('Range: 735 – 1235mm', true); return; }
+    if (isLocked) { toast('Locked', true); return; }
+    setStatus(`→ ${mm}mm`, true);
+    try {
+      await api(`/goto?mm=${mm}`);
+      toast(`Going to ${mm}mm`);
+      inp.value = '';
+      setTimeout(async () => {
+        try {
+          const pos = await api('/position');
+          currentMm = parseFloat(pos);
+          updateHeightDisplay();
+          setStatus('');
+        } catch(e) {}
+      }, Math.abs(mm - (currentMm || 735)) * 45 + 500);
+    } catch(e) { toast('Failed', true); setStatus(''); }
+  }
+
+  function renderProfiles() {
+    const grid = document.getElementById('profiles-grid');
+    grid.innerHTML = '';
+    profiles.forEach((p, i) => {
+      const slot = document.createElement('div');
+      slot.className = 'profile-slot' + (p.mm !== null ? ' set' : '');
+      slot.innerHTML = `
+        <div class="name">${p.name}</div>
+        <div class="profile-mm ${p.mm === null ? 'empty' : ''}">${p.mm !== null ? p.mm + ' mm' : 'not set'}</div>
+        <button class="save-btn" onclick="saveProfile(event, ${i})">save</button>
+      `;
+      if (p.mm !== null) {
+        slot.addEventListener('click', (e) => {
+          if (e.target.classList.contains('save-btn')) return;
+          gotoProfile(i);
+        });
+      }
+      grid.appendChild(slot);
+    });
+  }
+
+  function saveProfile(e, i) {
+    e.stopPropagation();
+    if (currentMm === null) { toast('No position known', true); return; }
+    profiles[i].mm = Math.round(currentMm);
+    localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+    renderProfiles();
+    toast(`Saved ${profiles[i].name} → ${profiles[i].mm}mm`);
+  }
+
+  async function gotoProfile(i) {
+    if (isLocked) { toast('Locked', true); return; }
+    const mm = profiles[i].mm;
+    setStatus(`→ ${profiles[i].name}`, true);
+    try {
+      await api(`/goto?mm=${mm}`);
+      toast(`Going to ${profiles[i].name}`);
+      setTimeout(async () => {
+        try {
+          const pos = await api('/position');
+          currentMm = parseFloat(pos);
+          updateHeightDisplay();
+          setStatus('');
+        } catch(e) {}
+      }, Math.abs(mm - currentMm) * 45 + 500);
+    } catch(e) { toast('Failed', true); setStatus(''); }
+  }
+
+  async function toggleLock() {
+    try {
+      await api(isLocked ? '/unlock' : '/lock');
+      isLocked = !isLocked;
+      const btn = document.getElementById('btn-lock');
+      btn.textContent = isLocked ? 'Unlock' : 'Lock';
+      btn.classList.toggle('active-lock', isLocked);
+      toast(isLocked ? 'Locked' : 'Unlocked');
+    } catch(e) { toast('Failed', true); }
+  }
+
+  async function calibrate() {
+    try {
+      await api('/calibrate');
+      currentMm = 735;
+      updateHeightDisplay();
+      toast('Calibrated → 735mm');
+    } catch(e) { toast('Failed', true); }
+  }
+
+  async function stopDesk() {
+    try {
+      await api('/stop');
+      setStatus('');
+      const pos = await api('/position');
+      currentMm = parseFloat(pos);
+      updateHeightDisplay();
+      toast('Stopped');
+    } catch(e) { toast('Failed', true); }
+  }
+
+  async function toggleSettings() {
+    showingSettings = !showingSettings;
+    document.getElementById('control-view').style.display = showingSettings ? 'none' : 'flex';
+    document.getElementById('settings-panel').classList.toggle('visible', showingSettings);
+    document.getElementById('btn-settings-toggle').classList.toggle('active', showingSettings);
+    if (showingSettings) await loadConfig();
+  }
+
+  async function loadConfig() {
+    try {
+      const raw  = await api('/config');
+      const cfg  = JSON.parse(raw);
+      const travel = cfg.maxHeightMm - cfg.minHeightMm;
+      document.getElementById('cfg-up-display').textContent      = cfg.upMsPerMm.toFixed(2);
+      document.getElementById('cfg-down-display').textContent    = cfg.downMsPerMm.toFixed(2);
+      document.getElementById('cfg-travel-display').textContent  = travel;
+      document.getElementById('cfg-current-display').textContent = Math.round(cfg.currentMm);
+    } catch(e) { toast('Failed to load config', true); }
+  }
+
+  async function applyConfig() {
+    const upMs     = document.getElementById('cfg-up-ms').value.trim();
+    const downMs   = document.getElementById('cfg-down-ms').value.trim();
+    const travelMm = document.getElementById('cfg-travel-mm').value.trim();
+    if (!upMs || !downMs || !travelMm) { toast('Fill all three fields', true); return; }
+    try {
+      await api(`/config?upMs=${upMs}&downMs=${downMs}&travelMm=${travelMm}`, 'POST');
+      toast('Config applied');
+      document.getElementById('cfg-up-ms').value = '';
+      document.getElementById('cfg-down-ms').value = '';
+      document.getElementById('cfg-travel-mm').value = '';
+      await loadConfig();
+    } catch(e) { toast('Failed to apply config', true); }
+  }
+
+  let toastTimer;
+  function toast(msg, error = false) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'show' + (error ? ' error' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.className = '', 2500);
+  }
+
+  const savedIp  = localStorage.getItem('desk_ip');
+  const savedKey = localStorage.getItem('desk_key');
+  if (savedIp)  document.getElementById('desk-username').value = savedIp;
+  if (savedKey) document.getElementById('desk-password').value = savedKey;
+</script>
+</body>
+</html>

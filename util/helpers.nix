@@ -5,7 +5,6 @@ let
     userSettings = config.userSettings;
     inputs = config.inputs;
     helpers = config.helpers;
-
   };
 
   newSystemSettings = {
@@ -41,6 +40,7 @@ let
     system = config.systemSettings.system;
     modules = [ 
       ../hosts/${config.name}/configuration.nix 
+      config.inputs.agenix.nixosModules.default
     ] ++ nixpkgs.lib.optionals config.systemSettings.useHMasModule [
       home-manager.nixosModules.home-manager
       {
