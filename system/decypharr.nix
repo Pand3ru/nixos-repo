@@ -18,6 +18,15 @@ in
     };
   };
 
+  systemd.services.decypharr.serviceConfig = {
+    DeviceAllow = [ "/dev/fuse" ];
+    AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
+  };
+
+  boot.kernelModules = [ "fuse" ];
+
+  users.users.decypharr.extraGroups = [ "fuse" ];
+
   systemd.tmpfiles.rules = [
     "d /mnt/remote 0755 decypharr decypharr - -"
     "d /mnt/remote/realdebrid 0755 decypharr decypharr - -"
