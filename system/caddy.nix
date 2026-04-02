@@ -8,6 +8,6 @@
   };
 
   systemd.services.caddy.serviceConfig = {
-    ProtectHome = "read-only";
+    ProtectHome = lib.mkForce "read-only";
   };
 }
