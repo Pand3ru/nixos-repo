@@ -3,6 +3,8 @@
   services.sonarr = {
     enable = true;
     openFirewall = true;
+     user = "decypharr";
+    group = "decypharr";
   };
 
   services.caddy.virtualHosts."http://sonarr.home".extraConfig = ''
