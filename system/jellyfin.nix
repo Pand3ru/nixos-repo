@@ -38,7 +38,6 @@
         "/dev/dri rw"
       ];
       SupplementaryGroups = [ "video" "render" ];
-      ReadOnlyPaths = [ "/etc/OpenCL" ];
       MemoryMax = "32G";
       CPUQuota = "800%";
       LimitNOFILE = 65536;
