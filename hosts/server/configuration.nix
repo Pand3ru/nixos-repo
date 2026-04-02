@@ -38,7 +38,8 @@ in
 
   
   restic.paths = [
-
+    "/mnt/cloud/"
+    "/var/lib/vaultwarde/backup"
   ];
 
   nixpkgs.config.allowUnfree = true;

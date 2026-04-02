@@ -1,5 +1,6 @@
-{ config, lib, pkgs, copyparty, ... }:
+{ config, lib, pkgs, inputs, ... }:
 let
+  copyparty = inputs.copyparty;
   panderu-pw = config.age.secrets.copypart-panderu.path;
   other-pw = config.age.secrets.copyparty-other.path;
 in 
