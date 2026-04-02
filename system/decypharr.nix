@@ -18,14 +18,15 @@ in
     };
   };
 
+  boot.kernelModules = [ "fuse" ];
+
+  users.groups.fuse = {};
+
   systemd.services.decypharr.serviceConfig = {
     DeviceAllow = [ "/dev/fuse" ];
     AmbientCapabilities = [ "CAP_SYS_ADMIN" ];
+    SupplementaryGroups = [ "fuse" ];
   };
-
-  boot.kernelModules = [ "fuse" ];
-
-  users.users.decypharr.group = "fuse";
 
   systemd.tmpfiles.rules = [
     "d /mnt/remote 0755 decypharr decypharr - -"
