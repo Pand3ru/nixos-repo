@@ -16,4 +16,4 @@
 - [ ] create a backup drive with all private keys from agenix
 - [ ] configure decypharr once and provide the json via assets instead. Not declarative but close enough
 
-update bookmarks: Hetzner, sonarr.home, media.home, radarr.home, whisparr.home, decypharr.home (dns eintrag noch dazu!)
+update bookmarks: Hetzner, sonarr.home, media.home, radarr.home, whisparr.home, decypharr.home (dns eintrag noch dazu!), fix desk.home!

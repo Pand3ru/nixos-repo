@@ -46,7 +46,11 @@ in
     {
       name = "System";
       bookmarks = [
-        (b "Desk" "http://desk.home:8080/" [ "local" "dashboard" ])
+        (b "Desk" "http://desk.home/" [ "local" "dashboard" ])
+        (b "Cloud" "https://cloud.panderu.org" [ "local" ])
+        (b "Vaultwarden" "https://vw.panderu.org" [ "local" ])
+        sep
+        (b "Hetzner" "https://console.hetzner.com/projects" [ "server" ])
 
         {
           name = "Nix";
@@ -70,6 +74,13 @@ in
         (b "r/Piracy Megathread" "https://www.reddit.com/r/Piracy/wiki/megathread/" [])
         (b "RealDebrid" "https://real-debrid.com/" [])
         (b "Premiumize" "https://www.premiumize.me/" [])
+        sep
+        (b "Jellyfin" "http://media.home/" [ "local" "media" ])
+        (b "Sonarr" "http://sonarr.home/" [ "local" "media" ])
+        (b "Radarr" "http://radarr.home/" [ "local" "media" ])
+        (b "Whisparr" "http://whisparr.home/" [ "local" "media" ])
+        (b "Decypharr" "http://decypharr.home/" [ "local" "media" ])
+        (b "Prowlarr" "http://prowlarr.home/" [ "local" "media" ])
         sep
         {
           name = "Stream";

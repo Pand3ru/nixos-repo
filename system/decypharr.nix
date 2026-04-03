@@ -45,4 +45,9 @@ in
     allowedTCPPorts = [ 8282 ];
     allowedUDPPorts = [ 8282 ];
   };
+
+  services.caddy.virtualHosts."http://decypharr.home".extraConfig = ''
+    reverse_proxy 127.0.0.1:8282
+  '';
+
 }
