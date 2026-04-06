@@ -21,6 +21,7 @@
       vim
       wget
       gnome-network-displays
+      solaar
       openh264 # this seems to maybe be related to gnome-network-displays
     ] ++ (with pkgs.gnomeExtensions; [
 
@@ -35,6 +36,7 @@
     workspace-indicator
     blur-my-shell
     gsconnect
+    solaar-extension
   ]);
 
   environment.gnome = {

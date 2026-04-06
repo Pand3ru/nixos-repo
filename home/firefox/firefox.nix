@@ -120,6 +120,10 @@ programs.firefox = {
         install_url = "https://addons.mozilla.org/firefox/downloads/file/4416483/startpage_private_search-2.0.3.xpi";
         installation_mode = "force_installed";
        };
+      "zotero@chnm.gmu.edu" = {
+        install_url = "https://www.zotero.org/download/connector/dl?browser=firefox&version=5.0.199";
+        installation_mode = "force_installed";
+        };
       };
     };
   };

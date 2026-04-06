@@ -40,6 +40,8 @@
     serviceConfig = {
       DeviceAllow = [
         "/dev/dri rw"
+        "/dev/dri/card0 rw"
+        "/dev/dri/renderD128 rw"
       ];
       SupplementaryGroups = [ "video" "render" ];
       MemoryMax = "32G";
