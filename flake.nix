@@ -9,17 +9,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+
     agenix.url = "github:ryantm/agenix";
     copyparty.url = "github:9001/copyparty";
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, agenix, nix-vscode-extensions, ... }@inputs:
   let
     system = "x86_64-linux";
     lib = nixpkgs.lib;
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      overlays = [ nix-vscode-extensions.overlays.default ];
     };
 
     helpers = import ./util/helpers.nix { inherit  nixpkgs home-manager; };

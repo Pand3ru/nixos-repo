@@ -11,6 +11,7 @@
     ../../home/ssh.nix
     ../../home/zellij.nix
     ../../home/thunderbird.nix
+    ../../home/vscode.nix
   ];
 
   home.username = userSettings.username;

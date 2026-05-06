@@ -23,5 +23,6 @@
     bitwarden-desktop 
     zotero
     zed-editor
+    calibre
   ];
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -29,6 +29,10 @@
     allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
     allowedUDPPortRanges = allowedTCPPortRanges;
   };
+
+  nixpkgs.overlays = [
+    inputs.nix-vscode-extensions.overlays.default
+  ];
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
