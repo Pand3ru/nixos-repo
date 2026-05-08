@@ -87,6 +87,8 @@ in
           bookmarks = [
             (b "1shows" "https://www.1shows.nl/tv" [ "movie" "show" ])
             (b "streameast" "https://v4.gostreameast.link/" [ "sports" ])
+            sep
+            (b "live sports" "https://fmhy.net/video#live-tv-sports" [ "sports" ])
           ];
         }
         {

@@ -49,7 +49,6 @@
 
       gnome-music
       gnome-weather
-      gnome-contacts
       gnome-characters
 
       geary # Mail client

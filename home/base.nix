@@ -9,7 +9,7 @@
   home.packages = with pkgs; [
 	anki-bin
 	signal-desktop
-    spotify
+    #spotify this package does not work anymore. (May 2026: installed flatpak)
 	curl
 	imagemagick
 	wireguard-tools

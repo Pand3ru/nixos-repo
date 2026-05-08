@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
@@ -15,11 +16,17 @@
     copyparty.url = "github:9001/copyparty";
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, nix-vscode-extensions, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, agenix, nix-vscode-extensions, nixpkgs-unstable, ... }@inputs:
   let
     system = "x86_64-linux";
     lib = nixpkgs.lib;
     pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+      overlays = [ nix-vscode-extensions.overlays.default ];
+    };
+
+    pkgs-unstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
       overlays = [ nix-vscode-extensions.overlays.default ];
@@ -35,7 +42,7 @@
       };
 
       userSettings = helpers.newUserSettings { };
-      inherit inputs;
+      inputs = inputs // { inherit pkgs-unstable; };
       inherit helpers;
     };
 

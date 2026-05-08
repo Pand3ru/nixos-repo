@@ -1,14 +1,15 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 let
   marketplace = pkgs.vscode-marketplace;
   native = pkgs.vscode-extensions;
+  pkgs-unstable = inputs.pkgs-unstable; 
 in
 {
   programs.vscode = {
     enable = true;
 
-    package = pkgs.vscode.fhsWithPackages (ps: with ps; [
+    package = pkgs-unstable.vscode.fhsWithPackages (ps: with ps; [
       go
       gopls
       gotools
@@ -30,7 +31,6 @@ in
       typst
       zlib
       openssl
-      zathura
     ]);
 
     extensions = [
@@ -45,6 +45,7 @@ in
       marketplace.twxs.cmake
       marketplace.redhat.java
       marketplace.vscjava.vscode-java-debug
+      marketplace.tomoki1207.pdf
       marketplace.vscjava.vscode-java-test
       marketplace.vscjava.vscode-maven
       marketplace.ms-python.python
@@ -52,7 +53,7 @@ in
       marketplace.ms-python.debugpy
       marketplace.haskell.haskell
       marketplace.justusadam.language-haskell
-      native.james-yu.latex-workshop
+      (marketplace.james-yu.latex-workshop.override { version = "10.7.1"; })
       native.myriad-dreamin.tinymist
       native.yzhang.markdown-all-in-one
       marketplace.usernamehw.errorlens
@@ -71,7 +72,6 @@ in
         "editor.insertSpaces"      = true;
         "editor.formatOnSave"      = true;
         "editor.wordWrap"          = "off";
-        "editor.rulers"            = [ 80 120 ];
         "editor.minimap.enabled"   = false;
         "editor.renderWhitespace"  = "trailing";
         "editor.cursorBlinking"    = "smooth";
@@ -138,15 +138,7 @@ in
         "haskell.formattingProvider" = "ormolu";
 
         "latex-workshop.latex.autoBuild.run" = "onSave";
-        "latex-workshop.view.pdf.viewer"     = "external";
-        "latex-workshop.view.pdf.external.viewer.command" = "zathura";
-        "latex-workshop.view.pdf.external.viewer.args"    = [ "%PDF%" ];
-        "latex-workshop.view.pdf.external.synctex.command" = "zathura";
-        "latex-workshop.view.pdf.external.synctex.args" = [
-          "--synctex-forward"
-          "%LINE%:%CHARACTER%:%TEX%"
-          "%PDF%"
-        ];
+        "latex-workshop.view.pdf.viewer"     = "tab";
         "latex-workshop.latex.outDir"   = "%DIR%/build";
         "latex-workshop.latex.clean.fileTypes" = [
           "*.aux" "*.bbl" "*.blg" "*.log" "*.out"
