@@ -3,6 +3,7 @@
   imports = [
 	../../home/nvim.nix
     ../../home/git.nix
+    ../../home/ssh.nix
   ];
 
   home.username = userSettings.username;
