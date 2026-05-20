@@ -50,6 +50,7 @@
       gnome-music
       gnome-weather
       gnome-characters
+      gnome-console
 
       geary # Mail client
       totem # Video player
