@@ -60,6 +60,7 @@ in
       marketplace.streetsidesoftware.code-spell-checker
       marketplace.bnavetta.zoterolatex
       marketplace.cattherapy.vscode-cat-therapy
+      marketplace.jeromystatia.vscode-cbor-viewer
     ];
 
     profiles.default = {

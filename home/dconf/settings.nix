@@ -8,18 +8,6 @@
 
   home.file."wallpaper.png".source = ../../assets/wallpaper.png;
 
-  home.file.".config/mimeapps.list" = {
-    text = ''
-      [Default Applications]
-      x-scheme-handler/http=firefox.desktop
-      x-scheme-handler/https=firefox.desktop
-      text/html=firefox.desktop
-      x-scheme-handler/mailto=thunderbird.desktop
-      application/vnd.ms-outlook=thunderbird.desktop
-    '';
-    force = true; 
-  };
-
   dconf.settings = {
   "org/gnome/shell" = {
     disable-user-extensions = false;
