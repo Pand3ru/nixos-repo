@@ -29,7 +29,7 @@ in
     ../../system/prowlarr.nix
     ../../system/radarr.nix
     ../../system/sonarr.nix
-    ../../system/whisparr.nix
+    ../../system/lidarr.nix
     # Web 
     ../../system/caddy.nix
     ../../system/copyparty.nix

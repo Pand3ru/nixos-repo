@@ -20,7 +20,7 @@
     vlc
     dnsutils
     flameshot
-    bitwarden-desktop 
+    #bitwarden-desktop -> Electron EOL (issue is tracked)
     zotero
     zed-editor
     calibre

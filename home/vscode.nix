@@ -60,7 +60,9 @@ in
       marketplace.streetsidesoftware.code-spell-checker
       marketplace.bnavetta.zoterolatex
       marketplace.cattherapy.vscode-cat-therapy
+
       marketplace.jeromystatia.vscode-cbor-viewer
+      marketplace.ms-vscode.hexeditor # cbor viewer dep
     ];
 
     profiles.default = {

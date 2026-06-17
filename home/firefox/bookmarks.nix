@@ -78,7 +78,7 @@ in
         (b "Jellyfin" "http://media.home/" [ "local" "media" ])
         (b "Sonarr" "http://sonarr.home/" [ "local" "media" ])
         (b "Radarr" "http://radarr.home/" [ "local" "media" ])
-        (b "Whisparr" "http://whisparr.home/" [ "local" "media" ])
+        (b "Whisparr" "http://lidarr.home/" [ "local" "media" ])
         (b "Decypharr" "http://decypharr.home/" [ "local" "media" ])
         (b "Prowlarr" "http://prowlarr.home/" [ "local" "media" ])
         sep
