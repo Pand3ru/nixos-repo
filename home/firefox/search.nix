@@ -1,7 +1,7 @@
 {
   force = true;
   default = "Startpage";
-  order = [ "Startpage" "DuckDuckGo" "Google" ]; 
+  order = [ "Startpage" "ddg" "google" ];
   engines = {
     "Nix Packages" = {
         urls = [{
@@ -11,7 +11,7 @@
                 { name = "query"; value = "{searchTerms}"; }
             ];
         }];
-        iconUpdateURL = "https://nixos.org/favicon.png";
+        icon = "https://nixos.org/favicon.png";
         definedAliases = [ "@np" ];
     };
 
@@ -23,7 +23,7 @@
                 { name = "query"; value = "{searchTerms}"; }
             ];
         }];
-        iconUpdateURL = "https://nixos.org/favicon.png"; 
+        icon = "https://nixos.org/favicon.png"; 
         definedAliases = [ "@no" ];
     };
 
@@ -34,7 +34,7 @@
                 { name = "query"; value = "{searchTerms}"; }
             ];
         }];
-        iconUpdateURL = "https://www.startpage.com/sp/cdn/favicons/favicon-256-a199a0cb.png"; 
+        icon = "https://www.startpage.com/sp/cdn/favicons/favicon-256-a199a0cb.png";
         definedAliases = [ "@sp" ]; 
     };
 

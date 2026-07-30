@@ -37,6 +37,8 @@
     blur-my-shell
     gsconnect
     solaar-extension
+    dash-to-dock
+    fullscreen-to-empty-workspace-2
   ]);
 
   environment.gnome = {

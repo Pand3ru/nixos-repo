@@ -33,39 +33,38 @@ in
       openssl
     ]);
 
-    extensions = [
-      native.dracula-theme.theme-dracula
-      native.vscodevim.vim
-      native.bbenoist.nix
-      marketplace.golang.go
-      native.rust-lang.rust-analyzer
-      native.vadimcn.vscode-lldb
-      marketplace.ms-vscode.cpptools
-      marketplace.ms-vscode.cmake-tools
-      marketplace.twxs.cmake
-      marketplace.redhat.java
-      marketplace.vscjava.vscode-java-debug
-      marketplace.tomoki1207.pdf
-      marketplace.vscjava.vscode-java-test
-      marketplace.vscjava.vscode-maven
-      marketplace.ms-python.python
-      marketplace.ms-python.vscode-pylance
-      marketplace.ms-python.debugpy
-      marketplace.haskell.haskell
-      marketplace.justusadam.language-haskell
-      (marketplace.james-yu.latex-workshop.override { version = "10.7.1"; })
-      native.myriad-dreamin.tinymist
-      native.yzhang.markdown-all-in-one
-      marketplace.usernamehw.errorlens
-      marketplace.streetsidesoftware.code-spell-checker
-      marketplace.bnavetta.zoterolatex
-      marketplace.cattherapy.vscode-cat-therapy
-
-      marketplace.jeromystatia.vscode-cbor-viewer
-      marketplace.ms-vscode.hexeditor # cbor viewer dep
-    ];
-
     profiles.default = {
+      extensions = [
+        native.dracula-theme.theme-dracula
+        native.vscodevim.vim
+        native.bbenoist.nix
+        marketplace.golang.go
+        native.rust-lang.rust-analyzer
+        native.vadimcn.vscode-lldb
+        marketplace.ms-vscode.cpptools
+        marketplace.ms-vscode.cmake-tools
+        marketplace.twxs.cmake
+        marketplace.redhat.java
+        marketplace.vscjava.vscode-java-debug
+        marketplace.tomoki1207.pdf
+        marketplace.vscjava.vscode-java-test
+        marketplace.vscjava.vscode-maven
+        marketplace.ms-python.python
+        marketplace.ms-python.vscode-pylance
+        marketplace.ms-python.debugpy
+        marketplace.haskell.haskell
+        marketplace.justusadam.language-haskell
+        (marketplace.james-yu.latex-workshop.override { version = "10.7.1"; })
+        native.myriad-dreamin.tinymist
+        native.yzhang.markdown-all-in-one
+        marketplace.usernamehw.errorlens
+        marketplace.streetsidesoftware.code-spell-checker
+        marketplace.bnavetta.zoterolatex
+        marketplace.cattherapy.vscode-cat-therapy
+
+        marketplace.jeromystatia.vscode-cbor-viewer
+        marketplace.ms-vscode.hexeditor # cbor viewer dep
+      ];
 
       userSettings = {
         "editor.fontFamily"        = "'JetBrains Mono', 'Fira Code', monospace";

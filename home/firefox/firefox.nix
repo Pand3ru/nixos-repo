@@ -15,9 +15,14 @@ programs.firefox = {
     search = import ./search.nix;
 
     bookmarks = {
-      force = true; 
+      force = true;
       settings = [ (import ./bookmarks.nix) ];
     };
+
+    # catppuccin.nix's Firefox module writes the Firefox Color theme via
+    # profiles.<name>.extensions.settings, which requires this ack since it
+    # would otherwise silently replace the whole extensions.settings set.
+    extensions.force = true;
 
     isDefault = true;
 

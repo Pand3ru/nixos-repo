@@ -16,6 +16,8 @@
       "blur-my-shell@aunetx"
       "just-perfection-desktop@just-perfection"
       "gsconnect@andyholmes.github.io"
+      "dash-to-dock@micxgx.gmail.com"
+      "fullscreen-to-empty-workspace2@corgijan.dev"
     ];
   };
 
@@ -40,24 +42,32 @@
   };
 
   "org/gnome/mutter" = {
-    dynamic-workspaces = false;
+    # Dynamic workspaces so fullscreen-to-empty-workspace always has a free
+    # workspace to move a newly-fullscreened window into (see below).
+    dynamic-workspaces = true;
   };
-  
-  "org/gnome/desktop/wm/preferences" = {
-    num-workspaces = 4;
+
+  # A small, autohiding dock/app bar. It stays out of the way and only shows
+  # up when the desktop is empty (no windows) or when the mouse hovers over
+  # its edge, similar to the macOS dock.
+  "org/gnome/shell/extensions/dash-to-dock" = {
+    dock-fixed = false;
+    autohide = true;
+    autohide-in-fullscreen = true;
+    require-pressure-to-show = false;
+    intellihide = true;
+    intellihide-mode = "ALL_WINDOWS";
+    dash-max-icon-size = 32;
+    extend-height = false;
+  };
+
+  # macOS-style behavior: maximizing a window (the button/shortcut you
+  # actually use) moves it to its own workspace.
+  "org/gnome/shell/extensions/fullscreen-to-empty-workspace" = {
+    move-window-when-maximized = true;
   };
 
   "org/gnome/desktop/wm/keybindings" = {
-    switch-to-workspace-1 = [ "<Super>h" ];
-    switch-to-workspace-2 = [ "<Super>j" ];
-    switch-to-workspace-3 = [ "<Super>k" ];
-    switch-to-workspace-4 = [ "<Super>l" ];
-  
-    move-to-workspace-1 = [ "<Super><Shift>h" ];
-    move-to-workspace-2 = [ "<Super><Shift>j" ];
-    move-to-workspace-3 = [ "<Super><Shift>k" ];
-    move-to-workspace-4 = [ "<Super><Shift>l" ];
-
     # Remove defaults
     switch-applications = [ ];
     switch-windows = [ ];
@@ -65,7 +75,7 @@
     close = [ "<Super>," ];
     minimize = [ "" ];
     toggle-maximized = [ "<Super>f" ];
-    toggle-fullscreen = [ "" ];
+    toggle-fullscreen = [ "F11" ];
     show-desktop = [ "" ];
   };
 

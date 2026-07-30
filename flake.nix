@@ -14,6 +14,9 @@
 
     agenix.url = "github:ryantm/agenix";
     copyparty.url = "github:9001/copyparty";
+
+    catppuccin.url = "github:catppuccin/nix";
+    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, home-manager, agenix, nix-vscode-extensions, nixpkgs-unstable, ... }@inputs:

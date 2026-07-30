@@ -17,6 +17,9 @@ in {
     initContent = ''
       cat ~/.cache/wal/sequences
       if [[ -z $ZELLIJ ]]; then
+          # Drop already-exited sessions first so they don't pile up forever;
+          # this never touches sessions that are still running.
+          zellij delete-all-sessions --yes >/dev/null 2>&1
           zellij
       fi
       clear

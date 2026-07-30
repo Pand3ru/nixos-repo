@@ -3,10 +3,23 @@
   services.ssh-agent.enable = true;
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "confirm";
+    enableDefaultConfig = false;
   };
 
   programs.ssh.matchBlocks = {
+    "*" = {
+      forwardAgent = false;
+      addKeysToAgent = "confirm";
+      compression = false;
+      serverAliveInterval = 0;
+      serverAliveCountMax = 3;
+      hashKnownHosts = false;
+      userKnownHostsFile = "~/.ssh/known_hosts";
+      controlMaster = "no";
+      controlPath = "~/.ssh/master-%r@%n:%p";
+      controlPersist = "no";
+    };
+
     github = {
       hostname = "github.com";
       user = "Pand3ru";
