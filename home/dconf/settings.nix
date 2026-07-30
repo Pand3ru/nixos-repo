@@ -6,7 +6,7 @@
     wl-clipboard
   ];
 
-  home.file."wallpaper.png".source = ../../assets/wallpaper.png;
+  home.file."wallpaper.png".source = ../../assets/10-15-Day-6k.jpg;
 
   dconf.settings = {
   "org/gnome/shell" = {

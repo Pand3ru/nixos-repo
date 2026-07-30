@@ -9,7 +9,6 @@
   home.packages = with pkgs; [
 	anki-bin
 	signal-desktop
-    #spotify this package does not work anymore. (May 2026: installed flatpak)
 	curl
 	imagemagick
 	wireguard-tools
@@ -24,5 +23,6 @@
     zotero
     zed-editor
     calibre
+    power-profiles-daemon
   ];
 }

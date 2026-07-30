@@ -20,6 +20,7 @@
     ../../system/man.nix
     ../../system/sudo.nix
     ../../system/printing.nix
+    ../../system/podman.nix
 
     # I am still looking for reasons. Until then, no
     #../../system/ssh.nix 
