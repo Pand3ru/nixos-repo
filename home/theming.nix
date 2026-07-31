@@ -28,6 +28,9 @@ in
     theme = {
       name = "Adwaita-dark";
     };
+    # home-manager 26.05 changed gtk4's theme default from following
+    # gtk.theme to null; keep GTK4 apps themed the same as GTK3 ones.
+    gtk4.theme = config.gtk.theme;
   };
 
   programs.alacritty = {

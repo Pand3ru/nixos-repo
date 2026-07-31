@@ -53,7 +53,6 @@ in
         marketplace.ms-python.vscode-pylance
         marketplace.ms-python.debugpy
         marketplace.haskell.haskell
-        marketplace.justusadam.language-haskell
         (marketplace.james-yu.latex-workshop.override { version = "10.7.1"; })
         native.myriad-dreamin.tinymist
         native.yzhang.markdown-all-in-one

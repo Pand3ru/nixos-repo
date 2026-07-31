@@ -11,6 +11,11 @@ in
 programs.firefox = {
   enable = true;
 
+  # home-manager 26.05 changed the default from ~/.mozilla/firefox to an
+  # XDG path; pin the old one so the existing profile (bookmarks, passwords,
+  # etc.) is still found instead of firefox looking empty on first launch.
+  configPath = ".mozilla/firefox";
+
   profiles.${userSettings.username} = {
     search = import ./search.nix;
 

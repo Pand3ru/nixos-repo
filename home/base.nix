@@ -1,4 +1,7 @@
-{ config, pkgs, ...}:
+{ config, pkgs, inputs, ...}:
+let
+  pkgs-unstable = inputs.pkgs-unstable;
+in
 {
   home.sessionVariables = {
     SHELL = "${pkgs.zsh}/bin/zsh";
@@ -19,7 +22,7 @@
     vlc
     dnsutils
     flameshot
-    #bitwarden-desktop -> Electron EOL (issue is tracked)
+    pkgs-unstable.bitwarden-desktop # stable's build is still on EOL Electron; unstable has the fix
     zotero
     zed-editor
     calibre

@@ -6,31 +6,31 @@
     enableDefaultConfig = false;
   };
 
-  programs.ssh.matchBlocks = {
+  programs.ssh.settings = {
     "*" = {
-      forwardAgent = false;
-      addKeysToAgent = "confirm";
-      compression = false;
-      serverAliveInterval = 0;
-      serverAliveCountMax = 3;
-      hashKnownHosts = false;
-      userKnownHostsFile = "~/.ssh/known_hosts";
-      controlMaster = "no";
-      controlPath = "~/.ssh/master-%r@%n:%p";
-      controlPersist = "no";
+      ForwardAgent = false;
+      AddKeysToAgent = "confirm";
+      Compression = false;
+      ServerAliveInterval = 0;
+      ServerAliveCountMax = 3;
+      HashKnownHosts = false;
+      UserKnownHostsFile = "~/.ssh/known_hosts";
+      ControlMaster = "no";
+      ControlPath = "~/.ssh/master-%r@%n:%p";
+      ControlPersist = "no";
     };
 
     github = {
-      hostname = "github.com";
-      user = "Pand3ru";
-      identityFile = "~/.ssh/github";
+      HostName = "github.com";
+      User = "Pand3ru";
+      IdentityFile = "~/.ssh/github";
     };
 
     server = {
-      hostname = "panderu.org";
-      port = 59454;
-      user = "panderu";
-      identityFile = "~/.ssh/serverKey";
+      HostName = "panderu.org";
+      Port = 59454;
+      User = "panderu";
+      IdentityFile = "~/.ssh/serverKey";
     };
   };
 }
