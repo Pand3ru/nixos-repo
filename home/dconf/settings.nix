@@ -17,7 +17,7 @@
       "just-perfection-desktop@just-perfection"
       "gsconnect@andyholmes.github.io"
       "dash-to-dock@micxgx.gmail.com"
-      "fullscreen-to-empty-workspace2@corgijan.dev"
+      "tilingshell@ferrarodomenico.com"
     ];
   };
 
@@ -42,9 +42,11 @@
   };
 
   "org/gnome/mutter" = {
-    # Dynamic workspaces so fullscreen-to-empty-workspace always has a free
-    # workspace to move a newly-fullscreened window into (see below).
-    dynamic-workspaces = true;
+    dynamic-workspaces = false;
+  };
+
+  "org/gnome/desktop/wm/preferences" = {
+    num-workspaces = 4;
   };
 
   # A small, autohiding dock/app bar. It stays out of the way and only shows
@@ -57,14 +59,8 @@
     require-pressure-to-show = false;
     intellihide = true;
     intellihide-mode = "ALL_WINDOWS";
-    dash-max-icon-size = 32;
+    dash-max-icon-size = 40;
     extend-height = false;
-  };
-
-  # macOS-style behavior: maximizing a window (the button/shortcut you
-  # actually use) moves it to its own workspace.
-  "org/gnome/shell/extensions/fullscreen-to-empty-workspace" = {
-    move-window-when-maximized = true;
   };
 
   "org/gnome/desktop/wm/keybindings" = {

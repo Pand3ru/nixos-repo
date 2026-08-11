@@ -1,26 +1,55 @@
-{ config, pkgs, lib, ...}:
+{ pkgs, ... }:
 {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+
+    initLua = ''
+      require("options")
+      require("keymaps")
+      require("setup")
+    '';
+
+    plugins = with pkgs.vimPlugins; [
+      vimtex
+      plenary-nvim
+      telescope-nvim
+      friendly-snippets
+      blink-cmp
+      nvim-lspconfig
+      conform-nvim
+
+      (nvim-treesitter.withPlugins (p: [
+        p.go
+        p.gomod
+        p.gosum
+        p.rust
+        p.lua
+        p.vim
+        p.vimdoc
+        p.query
+        p.bash
+        p.markdown
+        p.markdown_inline
+      ]))
+    ];
   };
 
-  # use lib.fakeHash in order to get hash
-  home.file.".config/nvim".source = pkgs.fetchFromGitHub {
-    owner = "Pand3ru";
-    repo = "nvim-config";
-    rev = "4b7e2e8";
-    sha256 = "sha256-e9+Mdfq+lcBOQyNpjSCsxVdiylDh7QbVDKcfZDxXQF0=";
-    # sha256 = lib.fakeHash;
-  };
+  xdg.configFile."nvim/lua".source = ./nvim/lua;
 
   # Deps
   home.packages = with pkgs; [
     git
     ripgrep
     fd
-    lua-language-server
     xclip
     xsel
+
+    gopls
+    gotools
+    go
+    rust-analyzer
+    rustfmt
+    rustc
   ];
 }

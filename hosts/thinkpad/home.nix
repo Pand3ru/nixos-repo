@@ -5,6 +5,7 @@
 	../../home/zsh.nix
 	../../home/theming.nix
 	../../home/catppuccin.nix
+	../../home/solaar.nix
 	../../home/nvim.nix
     ../../home/firefox/firefox.nix
     ../../home/git.nix

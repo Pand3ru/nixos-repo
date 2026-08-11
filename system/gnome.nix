@@ -6,6 +6,15 @@
     HandleLidSwitchDocked = "ignore";
   };
 
+  # Needed so solaar can simulate a key press (Wayland) for its MX Master
+  # button diversion rule.
+  hardware.uinput.enable = true;
+
+  # Without this, solaar's udev rules (granting the logged-in seat user
+  # raw hidraw access to Logitech devices) never get installed, so it can
+  # only talk to the receiver as root.
+  services.udev.packages = [ pkgs.solaar ];
+
   services.gnome.gnome-keyring.enable = true;
   services.gvfs.enable = true;
   services.displayManager.defaultSession = "gnome";
@@ -38,7 +47,8 @@
     gsconnect
     solaar-extension
     dash-to-dock
-    fullscreen-to-empty-workspace-2
+    user-themes
+    tiling-shell
   ]);
 
   environment.gnome = {

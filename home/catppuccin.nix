@@ -12,6 +12,7 @@ let
     "firefox"
     "thunderbird"
     "zellij"
+    "neovim"
   ];
 in
 {
