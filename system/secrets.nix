@@ -6,6 +6,10 @@
   ];
 
   age.secrets = {
+    email = {
+        file = ../secrets/email.age;
+    };
+
     ddns-url = {
       file = ../secrets/ddns-url.age;
     };

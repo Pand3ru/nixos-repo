@@ -21,15 +21,15 @@ in
     ../../system/dnsmasq.nix
     ../../system/firewall.nix
     ../../system/wireguard.nix
-    ../../system/netns-vpn.nix
-    ../../system/outbound_vpn.nix
+    #../../system/netns-vpn.nix
+    #../../system/outbound_vpn.nix
     # Media
     ../../system/jellyfin.nix
-    ../../system/decypharr.nix
-    ../../system/prowlarr.nix
-    ../../system/radarr.nix
-    ../../system/sonarr.nix
-    ../../system/lidarr.nix
+    #../../system/decypharr.nix
+    #../../system/prowlarr.nix
+    #../../system/radarr.nix
+    #../../system/sonarr.nix
+    #../../system/lidarr.nix
     # Web 
     ../../system/caddy.nix
     ../../system/copyparty.nix

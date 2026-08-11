@@ -12,6 +12,7 @@
     l = "ls -alh";
     ll = "ls -l";
     ls = "ls --color=tty";
+    s = "v /tmp/scratch-`shuf -i1000-9999 -n1`.md"; # creates a random scratch file
 
     more = "less";
     wget = "wget -c";
@@ -23,8 +24,6 @@
     v = "nvim";
     vim = "nvim";
     c = "clear";
-    # doesnt work under wayland. Maybe I can pull the session variable and replace the clipboard command
-    #copyDir = "find . -type f -exec sh -c 'for file; do echo \"Dateiname: $file\"; cat \"$file\"; done' sh {} + | xclip -selection clipboard";
     img = "loupe";
 
     nix-shell = ''nix-shell --run "zsh"'';

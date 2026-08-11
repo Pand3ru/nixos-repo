@@ -8,6 +8,8 @@
     enable = true;
     backupDir = "/var/lib/vaultwarde/backup";
 
+    environmentFile = config.age.secrets.email.path;
+
     config = {
       DOMAIN = "https://vw.panderu.org/";
       SIGNUPS_ALLOWED = false;
@@ -16,7 +18,8 @@
       ROCKET_PORT = 8222;
       ROCKET_LOG = "critical";
 
-      ORG_CREATION_USERS = "none";
+      ORGS_ALLOWED = true;
+      ORG_EVENTS_DISABLED = true;
     };
   };
 }

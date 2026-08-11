@@ -12,4 +12,5 @@ in {
   "backups_private_key.age".publicKeys = [ thinkpad server ];
   "backups_storage_pass.age".publicKeys = [ thinkpad server ];
   "backups_restic_pass.age".publicKeys = [ thinkpad server ];
+  "email.age".publicKeys = [ thinkpad server ];
 }
