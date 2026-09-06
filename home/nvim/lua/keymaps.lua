@@ -25,7 +25,10 @@ k('n', '<C-F>', function()
   end
 end, opts)
 
-k('n', '<C-SPACE>', function() require('telescope.builtin').oldfiles() end, opts)
+k('n', '<C-SPACE>', function() 
+    local b = require('telescope.builtin')
+    b.live_grep()
+end, opts)
 
 k('n', '<C-k>', vim.lsp.buf.hover, opts)
 

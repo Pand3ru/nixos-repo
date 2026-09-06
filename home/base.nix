@@ -27,5 +27,7 @@ in
     zed-editor
     calibre
     power-profiles-daemon
+    discord
+    openssl
   ];
 }

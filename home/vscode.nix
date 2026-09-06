@@ -153,6 +153,8 @@ in
         "tinymist.preview.invertColors" = "auto";
         "tinymist.preview.background" = true;
 
+        "zotero.latexCommand" =  "cite";
+
         "errorLens.enabledDiagnosticLevels" = [ "error" "warning" "info" ];
       };
 
