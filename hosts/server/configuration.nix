@@ -25,6 +25,7 @@ in
     #../../system/outbound_vpn.nix
     # Media
     ../../system/jellyfin.nix
+    ../../system/navidrome.nix
     #../../system/decypharr.nix
     #../../system/prowlarr.nix
     #../../system/radarr.nix
@@ -42,6 +43,18 @@ in
     "/mnt/cloud/"
     "/var/lib/vaultwarde/backup"
   ];
+
+  # Initramfs ssh daemon to unlock luks remotely
+  boot.initrd.availableKernelModules = [ "e1000e" ];
+  boot.initrd.network = {
+    enable = true;
+    ssh = {
+      enable = true;
+      port = 2222;
+      authorizedKeys = config.users.users.panderu.openssh.authorizedKeys.keys;
+      hostKeys = [ "/etc/secrets/initrd/ssh_host_ed25519_key" ];
+    };
+  };
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

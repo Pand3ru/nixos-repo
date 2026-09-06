@@ -38,11 +38,12 @@ in
        xff-hdr = "x-forwarded-for";
        rproxy = 1;
        dav-auth = true;
-       j = 4;
-       s-thead = 2;
+       j = 1;
+       s-thead = 120;
        no-thumb = false;
        unpost = 3600;
        hardlink = true;
+       hist = "/var/lib/copyparty/hist";
      };
 
      accounts = {
