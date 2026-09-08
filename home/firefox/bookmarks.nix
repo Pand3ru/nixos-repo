@@ -72,16 +72,11 @@ in
       name = "Media";
       bookmarks = [
         (b "r/Piracy Megathread" "https://www.reddit.com/r/Piracy/wiki/megathread/" [])
-        (b "RealDebrid" "https://real-debrid.com/" [])
-        (b "Premiumize" "https://www.premiumize.me/" [])
+        (b "FMHY" "https://fmhy.net/" [])
+        (b "TorBox" "https://torbox.app/" [])
         sep
+        (b "MyNoise" "https://mynoise.net" [ "audio" ])
         (b "Jellyfin" "http://media.home/" [ "local" "media" ])
-        (b "Sonarr" "http://sonarr.home/" [ "local" "media" ])
-        (b "Radarr" "http://radarr.home/" [ "local" "media" ])
-        (b "Whisparr" "http://lidarr.home/" [ "local" "media" ])
-        (b "Decypharr" "http://decypharr.home/" [ "local" "media" ])
-        (b "Prowlarr" "http://prowlarr.home/" [ "local" "media" ])
-        sep
         {
           name = "Stream";
           bookmarks = [
@@ -100,6 +95,8 @@ in
             (b "PirateBay" "https://thepiratebay.org/" [ "show" "movie" "software" "torrent" ])
             (b "Annas Archive" "https://annas-archive.pk/" [ "direct" "books" ])
             (b "AudiozDownload" "https://audioz.download/" [ "software" "debrid" ])
+            sep 
+            (b "Monochrome" "https://monochrome.tf" [ "audio" "direct" ])
           ];
         }
       ];
