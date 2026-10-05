@@ -1,4 +1,3 @@
-```nix
 let
   sep = "separator";
   b = n: u: t: { name = n; url = u; tags = t; };
@@ -169,4 +168,3 @@ in
     }
   ];
 }
-```
