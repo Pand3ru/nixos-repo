@@ -11,6 +11,7 @@ in
 
   home.packages = with pkgs; [
 	anki-bin
+    aonsoku 
 	signal-desktop
 	curl
 	imagemagick
@@ -23,6 +24,7 @@ in
     dnsutils
     flameshot
     pkgs-unstable.bitwarden-desktop # stable's build is still on EOL Electron; unstable has the fix
+    libreoffice
     zotero
     zed-editor
     calibre

@@ -22,6 +22,7 @@
     ../../system/printing.nix
     ../../system/podman.nix
     ../../system/infosecvms.nix
+    ../../system/localsend.nix
 
     # I am still looking for reasons. Until then, no
     #../../system/ssh.nix 
