@@ -1,15 +1,9 @@
 { config, pkgs, systemSettings, userSettings, lib, ... }:
 {
-  networking = rec {
+  # No NAT/forwarding: wireguard peers only need to reach the server itself.
+  # Keep the default dhcpcd setup, switching to NetworkManager remotely could cut the connection.
+  networking = {
     hostName = "homelab";
     domain = "panderu.org";
-
-    networkmanager.enable = true;
-
-    nat = {
-      enable = true;
-      externalInterface = "enp0s31f6";
-      internalInterfaces = [ "wg0" ];
-    };
   };
 }
