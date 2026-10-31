@@ -50,5 +50,15 @@
     backup-restic-pass = {
       file = ../secrets/backups_restic_pass.age;
     };
+
+    # Env file: GF_ADMIN_PASSWORD, GF_SECRET_KEY, PUSHOVER_USER_KEY, PUSHOVER_APP_TOKEN
+    grafana = {
+      file = ../secrets/grafana.age;
+    };
+
+    # Env file: HC_HEARTBEAT_URL, HC_BACKUP_URL
+    healthchecks = {
+      file = ../secrets/healthchecks.age;
+    };
   };
 }
