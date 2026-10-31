@@ -14,7 +14,6 @@
     ../../home/zellij.nix
     ../../home/thunderbird.nix
     ../../home/vscode.nix
-    ../../home/mimes.nix
     ../../home/xdg.nix
   ];
 

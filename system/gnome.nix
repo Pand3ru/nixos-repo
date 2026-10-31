@@ -1,4 +1,4 @@
-{ config, pkgs, systemSettings, userSettings, ... }:
+{ config, pkgs, inputs, systemSettings, userSettings, ... }:
 
 {
   services.logind.settings.Login = {
@@ -32,6 +32,7 @@
       gnome-network-displays
       solaar
       openh264 # this seems to maybe be related to gnome-network-displays
+      inputs.umlaut-panel.packages.${pkgs.stdenv.hostPlatform.system}.default
     ] ++ (with pkgs.gnomeExtensions; [
 
     # Remember to update them in the "Extensions" application

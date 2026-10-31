@@ -21,6 +21,7 @@ in
     zathura
     filezilla
     vlc
+    librepods
     dnsutils
     flameshot
     pkgs-unstable.bitwarden-desktop # stable's build is still on EOL Electron; unstable has the fix
@@ -32,4 +33,6 @@ in
     discord
     openssl
   ];
+
+  programs.codex.enable = true;
 }

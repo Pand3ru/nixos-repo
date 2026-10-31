@@ -18,7 +18,9 @@
       "gsconnect@andyholmes.github.io"
       "dash-to-dock@micxgx.gmail.com"
       "tilingshell@ferrarodomenico.com"
+      "umlaut-panel@local"
     ];
+    disabled-extensions = [ ];
   };
 
   "org/gnome/desktop/background" = {

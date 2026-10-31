@@ -12,7 +12,8 @@
     l = "ls -alh";
     ll = "ls -l";
     ls = "ls --color=tty";
-    s = "v /tmp/scratch-`shuf -i1000-9999 -n1`.md"; # creates a random scratch file
+    #s = "v /tmp/scratch-`shuf -i1000-9999 -n1`.md"; # creates a random scratch file
+    s = "v \"$(mktemp)\"";
 
     more = "less";
     wget = "wget -c";
