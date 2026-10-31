@@ -7,7 +7,8 @@ let
   reviewDir = "/mnt/media/needs-review";
   beetsDir  = "/var/lib/beets";
 
-  beetsPkg = pkgs.beets.override {
+  # pkgs.beets is now just toPythonApplication; pluginOverrides lives on the python module
+  beetsPkg = pkgs.python3.pkgs.toPythonApplication (pkgs.python3.pkgs.beets.override {
     pluginOverrides = {
       fetchart.enable   = true;
       embedart.enable   = true;
@@ -16,7 +17,7 @@ let
       scrub.enable      = true;
       replaygain.enable = true;
     };
-  };
+  });
 
   beetsConfig = pkgs.writeText "beets-config.yaml" ''
     directory: ${musicDir}
