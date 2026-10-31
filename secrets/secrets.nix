@@ -4,7 +4,6 @@ let
 in {
   "ddns-url.age".publicKeys = [ thinkpad server ];
   "wg-private.age".publicKeys = [ thinkpad server ];
-  "outbound_vpn.age".publicKeys = [ thinkpad server ]; 
   "copyparty_panderu.age".publicKeys = [ thinkpad server ];
   "copyparty_other.age".publicKeys = [ thinkpad server ];
   "backups_user.age".publicKeys = [ thinkpad server ];

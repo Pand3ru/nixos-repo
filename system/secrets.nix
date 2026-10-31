@@ -18,10 +18,6 @@
       file = ../secrets/wg-private.age;
     };
 
-    outbound-vpn = {
-      file = ../secrets/outbound_vpn.age;
-    };
-
     copyparty-panderu = {
       file = ../secrets/copyparty_panderu.age;
       owner = "copyparty";

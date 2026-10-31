@@ -3,13 +3,7 @@ let
   sk = config.age.secrets.wg-private.path;
 in
 {
-  networking.firewall = {
-    allowedUDPPorts = [ 51820 ];
-    extraCommands = ''
-      iptables -t mangle -A FORWARD -o wg0 -p tcp --tcp-flags SYN,RST SYN \
-        -j TCPMSS --clamp-mss-to-pmtu
-    '';
-  };
+  networking.firewall.allowedUDPPorts = [ 51820 ];
 
   networking.wireguard = {
     enable = true;

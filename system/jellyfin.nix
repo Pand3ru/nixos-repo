@@ -5,8 +5,6 @@
     openFirewall = true;
     dataDir = "/var/lib/jellyfin";
   };
-  
-  users.users."jellyfin".extraGroups = [ "radarr" "sonarr" ];
 
   services.caddy.virtualHosts."http://media.home".extraConfig = ''
     reverse_proxy 127.0.0.1:8096
