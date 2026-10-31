@@ -113,10 +113,17 @@ in
         listenAddress = "127.0.0.1";
         enabledCollectors = [ "systemd" ];
       };
-      # Autodiscovers all disks
+      # Explicit by-id paths: USB disks can swap sdX names between boots, the scan picks
+      # /dev/nvme0 (root-only) instead of the namespace, and the WD bridge doesn't speak SAT
+      # (scsi only gives overall health + temperature, no per-attribute values).
       smartctl = {
         enable = true;
         listenAddress = "127.0.0.1";
+        devices = [
+          "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0M429362;nvme"
+          "/dev/disk/by-id/ata-TOSHIBA_MQ04ABF100_Y7I7P95OT;sat"
+          "/dev/disk/by-id/usb-WD_Elements_323332393232383032353339-0:0;scsi"
+        ];
       };
     };
 
