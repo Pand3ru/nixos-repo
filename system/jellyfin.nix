@@ -10,29 +10,26 @@
     reverse_proxy 127.0.0.1:8096
   '';
 
+  # Debug tools only: vainfo, intel_gpu_top, clinfo
   environment.systemPackages = with pkgs; [
-    jellyfin
-    jellyfin-web
-    jellyfin-ffmpeg
-    intel-media-driver
-    ocl-icd
-    clinfo
-    libvdpau-va-gl
     libva-utils
     intel-gpu-tools
+    clinfo
   ];
 
+  # i7-7700T / HD 630 (Kaby Lake, Gen 9.5): use VAAPI in Jellyfin, not QSV.
+  # intel-media-sdk is EOL and vpl-gpu-rt needs Gen12+.
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver
+      intel-compute-runtime-legacy1 # OpenCL for HDR tone mapping (regular intel-compute-runtime is Gen12+ only)
     ];
   };
 
   systemd.services.jellyfin = {
     environment = {
       LIBVA_DRIVER_NAME = "iHD";
-      OCL_ICD_VENDORS = "/etc/OpenCL/vendors";
     };
 
     serviceConfig = {
@@ -49,5 +46,6 @@
   };
 
   boot.kernelModules = [ "i915" ];
+  # Kaby Lake needs HuC loaded for the low-power H.264 encoder
   boot.kernelParams = [ "i915.enable_guc=2" ];
 }
