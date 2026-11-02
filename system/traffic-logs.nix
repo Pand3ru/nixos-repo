@@ -7,7 +7,7 @@ let
   # Dashboard: no hostname anywhere, everything comes from the instance/host label values,
   # so new vhosts (or a second machine shipping to this Loki) show up on their own.
   loki = { type = "loki"; uid = "loki"; };
-  sel = extra: ''{job="caddy", instance=~"$instance", host=~"$host"${extra}}'';
+  sel = extra: ''{job="caddy", instance=~"$instance", host=~"$host", origin=~"$origin"${extra}}'';
   all = sel "";
 
   range = expr: legendFormat: { refId = "A"; datasource = loki; queryType = "range"; inherit expr legendFormat; };
@@ -78,12 +78,23 @@ let
     tags = [ "caddy" "loki" ];
     timezone = "browser";
     schemaVersion = 39;
-    refresh = "1m";
+    # Every refresh is ~15 requests through caddy itself, so keep it slow
+    refresh = "5m";
     time = { from = "now-24h"; to = "now"; };
 
     templating.list = [
       (variable "instance" ''label_values({job="caddy"}, instance)'')
       (variable "host" ''label_values({job="caddy", instance=~"$instance"}, host)'')
+      {
+        name = "origin";
+        label = "origin";
+        type = "custom";
+        query = "external,internal";
+        includeAll = true;
+        allValue = ".+";
+        current = { text = "external"; value = "external"; };
+        options = map (v: { text = v; value = v; selected = v == "external"; }) [ "external" "internal" ];
+      }
     ];
 
     panels = [
@@ -202,7 +213,9 @@ in
 
       schema_config.configs = [
         {
-          from = "2026-11-01";
+          # Must predate every line in the existing caddy logs, otherwise Loki answers 500
+          # and alloy stalls retrying those batches. Lines older than a week still get a clean 400.
+          from = "2020-01-01";
           store = "tsdb";
           object_store = "filesystem";
           schema = "v13";
@@ -256,6 +269,24 @@ in
         }
       }
 
+      // Some clients send the port in the Host header (grafana.panderu.org:443); one label per vhost
+      stage.replace {
+        source      = "host"
+        expression  = "(:[0-9]+)$"
+        replace     = ""
+      }
+
+      // origin=internal for LAN, wireguard, loopback and IPv6 ULA/link-local, everything else is external
+      stage.regex {
+        source     = "ip"
+        expression = `^(?P<internal_ip>(?:10|127)\.|192\.168\.|172\.(?:1[6-9]|2[0-9]|3[01])\.|169\.254\.|f[cd][0-9a-f]{2}:|fe80:|::1$)`
+      }
+
+      stage.template {
+        source   = "origin"
+        template = `{{ if .internal_ip }}internal{{ else }}external{{ end }}`
+      }
+
       stage.timestamp {
         source = "ts"
         format = "Unix"
@@ -271,6 +302,7 @@ in
         values = {
           host   = "",
           status = "",
+          origin = "",
         }
       }
 
