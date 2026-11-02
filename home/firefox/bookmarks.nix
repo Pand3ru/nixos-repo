@@ -1,6 +1,15 @@
+{ lib, inputs }:
 let
   sep = "separator";
   b = n: u: t: { name = n; url = u; tags = t; };
+
+  # Every server vhost with a `bookmark` name (see system/caddy.nix), sorted by name
+  homelab = lib.pipe inputs.self.nixosConfigurations.server.config.services.caddy.virtualHosts [
+    (lib.filterAttrs (_: v: v.bookmark != null))
+    (lib.mapAttrsToList (host: v:
+      b v.bookmark (if lib.hasPrefix "http://" host then "${host}/" else "https://${host}/") [ "local" ]))
+    (lib.sort (x: y: x.name < y.name))
+  ];
 in
 {
   name = "Bookmarks";
@@ -46,10 +55,7 @@ in
 
     {
       name = "System";
-      bookmarks = [
-        (b "Desk" "http://desk.home/" [ "local" "dashboard" ])
-        (b "Cloud" "https://cloud.panderu.org" [ "local" ])
-        (b "Vaultwarden" "https://vw.panderu.org" [ "local" ])
+      bookmarks = homelab ++ [
         sep
         (b "Hetzner" "https://console.hetzner.com/projects" [ "server" ])
 
@@ -118,7 +124,6 @@ in
         (b "TorBox" "https://torbox.app/" [])
         sep
         (b "MyNoise" "https://mynoise.net" [ "audio" ])
-        (b "Jellyfin" "http://media.home/" [ "local" "media" ])
 
         {
           name = "Stream";

@@ -17,6 +17,7 @@ in
     ../../system/locale.nix
     ../../system/restic-backups.nix
     ../../system/monitoring.nix
+    ../../system/traffic-logs.nix
     # Networking
     ../../system/networking_server.nix
     ../../system/ddns.nix

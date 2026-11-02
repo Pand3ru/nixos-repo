@@ -94,9 +94,12 @@ in
     };
   };
 
-  services.caddy.virtualHosts."${domain}".extraConfig = ''
-    reverse_proxy 127.0.0.1:4533
-  '';
+  services.caddy.virtualHosts.${domain} = {
+    bookmark = "Navidrome";
+    extraConfig = ''
+      reverse_proxy 127.0.0.1:4533
+    '';
+  };
 
   systemd.tmpfiles.rules = [
     "d ${musicDir}  0755 navidrome navidrome -"

@@ -1,4 +1,4 @@
-{ config, pkgs, userSettings, systemSettings, bookmarks, ...}:
+{ config, lib, pkgs, inputs, userSettings, systemSettings, bookmarks, ...}:
 let
     mozillaAddon = "https://addons.mozilla.org/firefox/downloads/latest";
 
@@ -21,7 +21,7 @@ programs.firefox = {
 
     bookmarks = {
       force = true;
-      settings = [ (import ./bookmarks.nix) ];
+      settings = [ (import ./bookmarks.nix { inherit lib inputs; }) ];
     };
 
     # catppuccin.nix's Firefox module writes the Firefox Color theme via

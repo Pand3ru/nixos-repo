@@ -6,6 +6,7 @@
     dataDir = "/var/lib/jellyfin";
   };
 
+  services.caddy.virtualHosts."http://media.home".bookmark = "Jellyfin";
   services.caddy.virtualHosts."http://media.home".extraConfig = ''
     reverse_proxy 127.0.0.1:8096
   '';

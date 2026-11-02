@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 {
+  services.caddy.virtualHosts."vw.panderu.org".bookmark = "Vaultwarden";
   services.caddy.virtualHosts."vw.panderu.org".extraConfig = ''
     reverse_proxy 127.0.0.1:8222
   '';

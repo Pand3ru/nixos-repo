@@ -145,7 +145,8 @@ in
       server = {
         http_addr = "0.0.0.0";
         http_port = grafanaPort;
-        domain = "grafana.home";
+        domain = "grafana.panderu.org";
+        root_url = "https://grafana.panderu.org/";
       };
       # All four values come from the grafana agenix env file
       security = {
@@ -232,6 +233,13 @@ in
   networking.firewall.interfaces = {
     ${lanInterface}.allowedTCPPorts = [ grafanaPort ];
     wg0.allowedTCPPorts = [ grafanaPort ];
+  };
+
+  services.caddy.virtualHosts."grafana.panderu.org" = {
+    bookmark = "Grafana";
+    extraConfig = ''
+      reverse_proxy 127.0.0.1:${toString grafanaPort}
+    '';
   };
 
   services.caddy.virtualHosts."http://grafana.home".extraConfig = ''
