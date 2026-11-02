@@ -24,6 +24,9 @@
     ../../system/infosecvms.nix
     ../../system/localsend.nix
 
+    # not in hm :(
+    ../../system/wireshark.nix
+
     # I am still looking for reasons. Until then, no
     #../../system/ssh.nix 
   ];

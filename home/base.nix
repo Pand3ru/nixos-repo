@@ -32,6 +32,10 @@ in
     power-profiles-daemon
     discord
     openssl
+
+    # Networking 
+    whois 
+    tcpdump 
   ];
 
   programs.codex.enable = true;
