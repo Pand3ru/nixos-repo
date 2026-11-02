@@ -6,7 +6,8 @@ in
   systemd.timers."ddns" = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendar = "hourly";
+      OnBootSec = "10min";
+      OnUnitActiveSec="15min";
       Persistent = true;
     };
   };
