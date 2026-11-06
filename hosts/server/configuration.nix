@@ -31,6 +31,7 @@ in
     ../../system/caddy.nix
     ../../system/copyparty.nix
     ../../system/desk.nix
+    ../../system/desk-stats.nix
     ../../system/vaultwarden.nix
   ];
 

@@ -96,7 +96,8 @@ let
     (mkRule {
       uid = "exporter-down";
       title = "Exporter down";
-      expr = "up == 0";
+      # Desks are switched off at night
+      expr = ''up{job!="desk"} == 0'';
       summary = "{{ $labels.job }} ist nicht erreichbar";
     })
   ];
@@ -105,7 +106,7 @@ in
   services.prometheus = {
     enable = true;
     listenAddress = "127.0.0.1";
-    retentionTime = "90d";
+    retentionTime = "2y";
 
     exporters = {
       node = {
@@ -153,7 +154,18 @@ in
         admin_user = "admin";
         admin_password = "$__env{GF_ADMIN_PASSWORD}";
         secret_key = "$__env{GF_SECRET_KEY}";
+        allow_embedding = true;
       };
+      # grafana.home (LAN/VPN only) logs in automatically as a viewer so the desk page can embed
+      # panels; Caddy sets the header there and strips it on grafana.panderu.org, which still needs a login
+      "auth.proxy" = {
+        enabled = true;
+        header_name = "X-WEBAUTH-USER";
+        header_property = "username";
+        auto_sign_up = true;
+        whitelist = "127.0.0.1, ::1";
+      };
+      users.auto_assign_org_role = "Viewer";
       analytics.reporting_enabled = false;
     };
 
@@ -237,13 +249,22 @@ in
 
   services.caddy.virtualHosts."grafana.panderu.org" = {
     bookmark = "Grafana";
+    # Strip the auth proxy header: Caddy connects from the whitelisted 127.0.0.1
     extraConfig = ''
-      reverse_proxy 127.0.0.1:${toString grafanaPort}
+      reverse_proxy 127.0.0.1:${toString grafanaPort} {
+        header_up -X-WEBAUTH-USER
+      }
     '';
   };
 
+  # Port 80 is open to the internet, a spoofed Host header must not get the auto login
   services.caddy.virtualHosts."http://grafana.home".extraConfig = ''
-    reverse_proxy 127.0.0.1:${toString grafanaPort}
+    @external not remote_ip private_ranges
+    abort @external
+
+    reverse_proxy 127.0.0.1:${toString grafanaPort} {
+      header_up X-WEBAUTH-USER desk-viewer
+    }
   '';
 
   # Dead man's switch: healthchecks.io alerts via pushover when these pings stop
