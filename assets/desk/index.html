@@ -677,7 +677,8 @@ a { color: var(--accent); }
 
 /* ======= Grafana configuration ======= */
 const GRAFANA = {
-  base: 'http://grafana.home',
+  // opened by IP (no local DNS): Caddy serves the same grafana.home on port 3001
+  base: location.hostname === 'desk.home' ? 'http://grafana.home' : `http://${location.hostname}:3001`,
   dashboardUid: 'desk',      // empty = hide the Stats tab
   slug: 'desk',
   panels: [                  // panel IDs from Grafana (system/desk-stats.nix)

@@ -32,6 +32,7 @@ in
     ../../system/copyparty.nix
     ../../system/desk.nix
     ../../system/desk-stats.nix
+    ../../system/desk-backup.nix
     ../../system/vaultwarden.nix
   ];
 

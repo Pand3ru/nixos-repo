@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 let
   grafanaPort = 3000;
+  # grafana.home on a plain port, for the desk page when it's opened by IP (no dnsmasq)
+  grafanaEmbedPort = 3001;
   lanInterface = "enp0s31f6";
 
   # Dashboards from grafana.com, pinned by revision
@@ -243,8 +245,8 @@ in
 
   # Only reachable from LAN and wireguard (iPhone: http://10.0.0.1:3000)
   networking.firewall.interfaces = {
-    ${lanInterface}.allowedTCPPorts = [ grafanaPort ];
-    wg0.allowedTCPPorts = [ grafanaPort ];
+    ${lanInterface}.allowedTCPPorts = [ grafanaPort grafanaEmbedPort ];
+    wg0.allowedTCPPorts = [ grafanaPort grafanaEmbedPort ];
   };
 
   services.caddy.virtualHosts."grafana.panderu.org" = {
@@ -258,6 +260,7 @@ in
   };
 
   # Port 80 is open to the internet, a spoofed Host header must not get the auto login
+  services.caddy.virtualHosts."http://grafana.home".serverAliases = [ "http://:${toString grafanaEmbedPort}" ];
   services.caddy.virtualHosts."http://grafana.home".extraConfig = ''
     @external not remote_ip private_ranges
     abort @external

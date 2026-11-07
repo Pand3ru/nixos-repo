@@ -61,6 +61,8 @@ in
     ];
 
     services.caddy.virtualHosts."http://desk.home".bookmark = "Desk";
+    # Also reachable by the server IP for devices that don't use dnsmasq
+    services.caddy.virtualHosts."http://desk.home".serverAliases = [ "http://192.168.50.203" ];
     # Port 80 is open to the internet for ACME, so a spoofed Host header must not reach the desks.
     # Everything sits in one route to keep the written order: Caddy sorts abort after handle otherwise.
     # The frontend falls back to /api/ip/<ip>/ only on network errors or 502/504, hence the 502.
