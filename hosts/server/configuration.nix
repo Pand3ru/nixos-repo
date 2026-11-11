@@ -23,6 +23,7 @@ in
     ../../system/ddns.nix
     ../../system/dnsmasq.nix
     ../../system/firewall.nix
+    ../../system/fail2ban.nix
     ../../system/wireguard.nix
     # Media
     ../../system/jellyfin.nix

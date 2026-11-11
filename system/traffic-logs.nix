@@ -72,6 +72,80 @@ let
     current = { text = [ "All" ]; value = [ "$__all" ]; };
   };
 
+  # Collapsed row below the last panel (ends at y = 58), data from system/fail2ban.nix.
+  # Exporter metrics have no per-IP labels; the IP list comes from the fail2ban SQLite db and Loki.
+  prometheus = { type = "prometheus"; uid = "prometheus"; };
+  fail2banDb = { type = "frser-sqlite-datasource"; uid = "fail2ban-db"; };
+
+  f2bStat = { id, title, x, w, expr, legendFormat ? "", description ? "" }: {
+    inherit id title description;
+    type = "stat";
+    datasource = prometheus;
+    gridPos = { inherit x w; y = 59; h = 4; };
+    targets = [ { refId = "A"; datasource = prometheus; instant = true; inherit expr legendFormat; } ];
+    fieldConfig.defaults = { unit = "short"; color.mode = "fixed"; color.fixedColor = "text"; };
+    options = { colorMode = "none"; graphMode = "none"; textMode = "value_and_name"; reduceOptions.calcs = [ "lastNotNull" ]; };
+  };
+
+  # bips holds one row per (ip, jail), the latest ban; it's what fail2ban restores on start
+  # and what unbanip deletes from. bantime -1 = permanent.
+  activeBansSql = ''
+    SELECT timeofban AS time, ip, jail,
+           json_extract(data, '$.failures') AS failures,
+           bancount
+    FROM bips
+    WHERE bantime = -1 OR timeofban + bantime > CAST(strftime('%s', 'now') AS INTEGER)
+    ORDER BY timeofban DESC
+  '';
+
+  fail2banRow = [
+    {
+      id = 14; type = "row"; title = "fail2ban"; collapsed = true;
+      gridPos = { x = 0; y = 58; w = 24; h = 1; };
+      panels = [
+        (f2bStat { id = 15; title = "Aktuell gebannt pro Jail"; x = 0; w = 12;
+          expr = "sum by (jail) (f2b_jail_banned_current)"; legendFormat = "{{jail}}"; })
+        (f2bStat { id = 16; title = "Aktuell gebannt"; x = 12; w = 6;
+          expr = "sum(f2b_jail_banned_current)"; })
+        (f2bStat { id = 17; title = "Bans gesamt"; x = 18; w = 6;
+          description = "Summe von f2b_jail_banned_total; fail2ban zählt ab dem letzten Start (wiederhergestellte Bans eingeschlossen).";
+          expr = "sum(f2b_jail_banned_total)"; })
+
+        {
+          id = 18; type = "table"; title = "Aktive Bans (vollständig, unabhängig vom Zeitraum)";
+          description = "Direkt aus der fail2ban-Datenbank (Tabelle bips), neueste zuerst. Entsperrte IPs verschwinden hier sofort.";
+          datasource = fail2banDb;
+          gridPos = { x = 0; y = 63; w = 24; h = 12; };
+          targets = [ { refId = "A"; datasource = fail2banDb; queryType = "table"; rawQueryText = activeBansSql; queryText = activeBansSql; timeColumns = [ "time" ]; } ];
+          transformations = [
+            { id = "organize"; options.renameByName = { time = "Gebannt seit"; ip = "IP"; jail = "Jail"; failures = "Treffer"; bancount = "Bans"; }; }
+          ];
+          options.sortBy = [ { displayName = "Gebannt seit"; desc = true; } ];
+        }
+
+        {
+          id = 19; type = "table"; title = "Ban-Ereignisse im gewählten Zeitraum (Loki)";
+          description = "Ban-/Unban-Zeilen aus dem fail2ban-Log, nur innerhalb des Dashboard-Zeitraums. Die vollständige Liste steht in der Tabelle darüber.";
+          datasource = loki;
+          gridPos = { x = 0; y = 75; w = 24; h = 10; };
+          targets = [ (range ''{job="fail2ban", instance=~"$instance"}'' "") ];
+          transformations = [
+            { id = "extractFields"; options = { source = "labels"; format = "json"; replace = false; }; }
+            {
+              id = "organize";
+              options = {
+                includeByName = { Time = true; action = true; jail = true; ip = true; };
+                indexByName = { Time = 0; action = 1; jail = 2; ip = 3; };
+                renameByName = { Time = "Zeit"; action = "Aktion"; jail = "Jail"; ip = "IP"; };
+              };
+            }
+          ];
+          options.sortBy = [ { displayName = "Zeit"; desc = true; } ];
+        }
+      ];
+    }
+  ];
+
   dashboard = {
     uid = "caddy-traffic";
     title = "Caddy Traffic";
@@ -181,7 +255,7 @@ let
         targets = [ (range all "") ];
         options = { showTime = true; wrapLogMessage = false; enableLogDetails = true; sortOrder = "Descending"; };
       })
-    ];
+    ] ++ lib.optionals config.services.fail2ban.enable fail2banRow;
   };
 in
 {

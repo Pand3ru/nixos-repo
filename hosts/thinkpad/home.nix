@@ -15,6 +15,7 @@
     ../../home/thunderbird.nix
     ../../home/vscode.nix
     ../../home/xdg.nix
+    ../../home/espanso.nix
   ];
 
   home.username = userSettings.username;

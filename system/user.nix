@@ -3,7 +3,7 @@
   users.users.${userSettings.username}= {
     isNormalUser = true;
     description = userSettings.displayname;
-    extraGroups = [ "networkmanager" "wheel" "dialout" "uinput" ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" "uinput" "input" ];
     initialPassword = "${userSettings.username}";
     shell = "${pkgs.zsh}/bin/zsh";
     packages = with pkgs; [ ];
