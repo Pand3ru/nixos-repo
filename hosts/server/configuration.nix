@@ -50,7 +50,13 @@ in
     ssh = {
       enable = true;
       port = 2222;
-      authorizedKeys = config.users.users.panderu.openssh.authorizedKeys.keys;
+      # Dedicated key (~/.ssh/server_initramfs), not valid for any login on the running system.
+      # Forced command: no shell, no forwarding, only answers the pending LUKS passphrase prompts
+      # (systemd stage 1, so systemd's agent instead of cryptsetup-askpass; needs a pty for the prompt).
+      # Root's shell stays bash: sshd runs the forced command through `<shell> -c`.
+      authorizedKeys = [
+        ''restrict,pty,command="/bin/systemd-tty-ask-password-agent --query" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG4vbHJmb8KAmCJUVAJCKBZSODiMva+7/43lbrcewoke panderu-initrd-unlock''
+      ];
       hostKeys = [ "/etc/secrets/initrd/ssh_host_ed25519_key" ];
     };
   };

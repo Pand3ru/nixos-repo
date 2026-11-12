@@ -137,7 +137,6 @@ main { max-width: 1040px; margin: 0 auto; padding: 16px 16px 96px; }
 .card h3 { margin: 0; font-size: 0.95rem; font-weight: 600; }
 .hint { margin: 0; color: var(--text-dim); font-size: 0.875rem; }
 .muted { color: var(--text-dim); }
-.narrow { max-width: 640px; width: 100%; }
 
 .banners { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .banners:empty { display: none; }
@@ -188,6 +187,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
 
 .switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; cursor: pointer; }
+.switch small { display: block; color: var(--text-dim); font-size: 0.85rem; }
 .switch input {
   appearance: none; -webkit-appearance: none; flex: none;
   width: 46px; height: 28px; border-radius: 999px; margin: 0;
@@ -295,15 +295,39 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .row-text { min-width: 0; }
 .row-text .label { display: block; font-size: 0.8rem; }
 .row-text .value { display: block; font-weight: 500; }
+.row-text .sub { display: block; font-size: 0.8rem; color: var(--text-dim); }
 .row .btn { min-width: 96px; }
 .row.highlight .value { color: var(--accent); }
 
-/* ---------- Profiles ---------- */
-.prof-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+/* ---------- Settings ---------- */
+.settings { max-width: 640px; width: 100%; gap: 28px; }
+.group { display: flex; flex-direction: column; gap: 12px; }
+.group > h2 { margin: 0; font-size: 1.15rem; font-weight: 600; }
+.group > .hint { margin-top: -8px; }
+.prof-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
 .prof-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 12px; }
 .badge { font-size: 0.8rem; color: var(--text-dim); border: 1px solid var(--border-strong); border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
 .big-val { font-size: 2rem; font-weight: 600; line-height: 1; margin: 0 0 14px; }
 .big-val small { font-size: 1rem; color: var(--text-dim); font-weight: 500; }
+.split { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.divider { border: 0; border-top: 1px solid var(--border); margin: 16px 0; }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 8px 0 16px; }
+.kv div { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
+.kv dt { font-size: 0.8rem; color: var(--text-dim); }
+.kv dd { margin: 2px 0 0; font-size: 1.2rem; font-weight: 600; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+details.card > summary {
+  cursor: pointer; font-weight: 600; min-height: 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; list-style: none;
+}
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::after {
+  content: ""; width: 8px; height: 8px; flex: none; margin-right: 4px;
+  border-right: 2px solid var(--text-dim); border-bottom: 2px solid var(--text-dim);
+  transform: rotate(45deg);
+}
+details.card[open] > summary::after { transform: rotate(-135deg); }
+details.card[open] > summary { margin-bottom: 12px; }
 
 /* ---------- Stats ---------- */
 .seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; }
@@ -320,13 +344,6 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .panel-frame h3 { margin-bottom: 8px; }
 .panel-frame iframe { display: block; width: 100%; height: 280px; border: 0; border-radius: var(--radius-sm); background: var(--bg); }
 a { color: var(--accent); }
-
-/* ---------- Settings ---------- */
-.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 8px 0 16px; }
-.kv div { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
-.kv dt { font-size: 0.8rem; color: var(--text-dim); }
-.kv dd { margin: 2px 0 0; font-size: 1.2rem; font-weight: 600; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
 
 /* ---------- Toast ---------- */
 .toast {
@@ -390,8 +407,6 @@ a { color: var(--accent); }
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections" id="tabs">
       <button class="tab" role="tab" id="t-control" aria-controls="p-control" aria-selected="true" data-tab="control">Control</button>
-      <button class="tab" role="tab" id="t-profiles" aria-controls="p-profiles" aria-selected="false" tabindex="-1" data-tab="profiles">Profiles</button>
-      <button class="tab" role="tab" id="t-day" aria-controls="p-day" aria-selected="false" tabindex="-1" data-tab="day">Work day</button>
       <button class="tab" role="tab" id="t-stats" aria-controls="p-stats" aria-selected="false" tabindex="-1" data-tab="stats" hidden>Stats</button>
       <button class="tab" role="tab" id="t-settings" aria-controls="p-settings" aria-selected="false" tabindex="-1" data-tab="settings">Settings</button>
     </nav>
@@ -408,6 +423,7 @@ a { color: var(--accent); }
       <button class="btn ghost" type="button" id="b-rename-dismiss">Dismiss</button>
     </div>
     <div class="alert" id="b-clock" hidden><span>Desk clock not synced yet – work day end times are inactive.</span></div>
+    <div class="alert" id="b-drift" hidden><span id="b-drift-text"></span></div>
   </div>
 
   <!-- ===== Control ===== -->
@@ -489,7 +505,7 @@ a { color: var(--accent); }
             </div>
           </div>
         </div>
-        <p class="lock-note" id="lock-note" hidden>Desk is locked. Unlock it to move.</p>
+        <p class="lock-note" id="lock-note" hidden>Desk is locked: buttons and manual moves are blocked. Auto switch still moves it.</p>
 
         <button class="stop" type="button" id="stop" data-conn>Stop</button>
 
@@ -514,90 +530,16 @@ a { color: var(--accent); }
             <button class="btn" type="button" id="day-btn" data-conn>Start day</button>
           </div>
           <div class="row" id="auto-row" hidden>
-            <div class="row-text"><span class="label">Auto switch</span><span class="value" id="auto-text"></span></div>
+            <div class="row-text">
+              <span class="label">Auto switch</span>
+              <span class="value" id="auto-text"></span>
+              <span class="sub" id="auto-last" hidden></span>
+            </div>
             <button class="btn" type="button" id="auto-skip" data-conn data-act="skip">Skip</button>
           </div>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- ===== Profiles ===== -->
-  <section class="panel" id="p-profiles" role="tabpanel" aria-labelledby="t-profiles" hidden>
-    <div class="prof-cards">
-      <form class="card" data-pform="1" novalidate>
-        <div class="prof-head"><h2>Sitting</h2><span class="badge" data-pbadge>—</span></div>
-        <p class="big-val" data-pval>—</p>
-        <div class="field">
-          <label for="pf-1">New height (mm)</label>
-          <div class="inline">
-            <input id="pf-1" type="number" inputmode="decimal" min="735" max="1235" step="1" placeholder="735 – 1235" aria-describedby="pf-1-err" data-conn>
-            <button class="btn primary" type="submit" data-conn>Save</button>
-          </div>
-          <p class="field-error" id="pf-1-err" hidden></p>
-        </div>
-        <div class="actions"><button class="btn" type="button" data-conn data-usecur="1">Use current height</button></div>
-      </form>
-      <form class="card" data-pform="2" novalidate>
-        <div class="prof-head"><h2>Standing</h2><span class="badge" data-pbadge>—</span></div>
-        <p class="big-val" data-pval>—</p>
-        <div class="field">
-          <label for="pf-2">New height (mm)</label>
-          <div class="inline">
-            <input id="pf-2" type="number" inputmode="decimal" min="735" max="1235" step="1" placeholder="735 – 1235" aria-describedby="pf-2-err" data-conn>
-            <button class="btn primary" type="submit" data-conn>Save</button>
-          </div>
-          <p class="field-error" id="pf-2-err" hidden></p>
-        </div>
-        <div class="actions"><button class="btn" type="button" data-conn data-usecur="2">Use current height</button></div>
-      </form>
-    </div>
-    <div class="card narrow">
-      <h2>Desk buttons</h2>
-      <p id="mapping" class="value">—</p>
-      <p class="hint">Short press moves to the profile. Hold for 2 s to save the current height (LED blinks 3×).</p>
-      <div class="actions"><button class="btn" type="button" id="swap-btn" data-conn>Swap buttons</button></div>
-    </div>
-  </section>
-
-  <!-- ===== Work day ===== -->
-  <section class="panel" id="p-day" role="tabpanel" aria-labelledby="t-day" hidden>
-    <form class="card narrow" id="today-form" novalidate>
-      <h2>Today</h2>
-      <p class="hint" id="today-hint">—</p>
-      <div class="field" style="margin-top:12px">
-        <label for="today-end">Work day ends at</label>
-        <div class="inline">
-          <input id="today-end" type="time" aria-describedby="today-err" data-conn>
-          <button class="btn primary" type="submit" data-conn>Set</button>
-        </div>
-        <p class="field-error" id="today-err" hidden></p>
-      </div>
-    </form>
-
-    <form class="card narrow" id="auto-form" novalidate>
-      <h2>Schedule</h2>
-      <div class="stack" style="margin-top:12px">
-        <div class="field">
-          <label for="reg-end">Day normally ends at</label>
-          <input id="reg-end" type="time" data-conn>
-        </div>
-        <label class="switch"><span>Auto switch between sitting and standing</span><input type="checkbox" id="auto-en" data-conn></label>
-        <div class="form-grid">
-          <div class="field">
-            <label for="interval">Every (min)</label>
-            <input id="interval" type="number" inputmode="numeric" min="5" max="480" step="1" data-conn>
-          </div>
-          <div class="field">
-            <label for="lockmin">Lock after switch (min, 0 = off)</label>
-            <input id="lockmin" type="number" inputmode="numeric" min="0" max="240" step="1" data-conn>
-          </div>
-        </div>
-        <p class="field-error" id="auto-err" hidden></p>
-        <div><button class="btn primary" type="submit" data-conn>Save</button></div>
-        <p class="hint">Auto switch only runs while the work day is running. Pressing a desk button in the opposite direction during a move stops the desk and moves it back after one second; press again to stay where it is.</p>
-      </div>
-    </form>
   </section>
 
   <!-- ===== Stats ===== -->
@@ -613,59 +555,163 @@ a { color: var(--accent); }
     <div class="stats-grid" id="stats-grid"></div>
   </section>
 
-  <!-- ===== Settings ===== -->
-  <section class="panel" id="p-settings" role="tabpanel" aria-labelledby="t-settings" hidden>
-    <form class="card narrow" id="rename-form" novalidate>
-      <h2>Device</h2>
-      <div class="field" style="margin-top:12px">
-        <label for="hostname">Hostname</label>
-        <div class="inline">
-          <input id="hostname" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="31" aria-describedby="host-err host-hint" data-conn>
-          <button class="btn primary" type="submit" data-conn>Rename</button>
-        </div>
-        <p class="field-error" id="host-err" hidden></p>
-        <p class="hint" id="host-hint">Lowercase letters, digits and hyphens, up to 31 characters. The desk restarts after renaming.</p>
-      </div>
-    </form>
+  <!-- ===== Settings: one page, ordered by how often you need it ===== -->
+  <section class="panel settings" id="p-settings" role="tabpanel" aria-labelledby="t-settings" hidden>
 
-    <div class="card narrow">
-      <h2>Calibration</h2>
-      <dl class="kv">
-        <div><dt>Up ms/mm</dt><dd id="c-up">—</dd></div>
-        <div><dt>Down ms/mm</dt><dd id="c-down">—</dd></div>
-        <div><dt>Travel</dt><dd id="c-travel">—</dd></div>
-        <div><dt>Current</dt><dd id="c-cur">—</dd></div>
-      </dl>
-      <form id="config-form" novalidate>
-        <p class="hint">Time a full run from lowest to highest position and back, enter both durations and the distance.</p>
-        <div class="form-grid" style="margin-top:12px">
-          <div class="field"><label for="up-ms">Total ms up</label><input id="up-ms" type="number" inputmode="numeric" min="1" placeholder="e.g. 21230" data-conn></div>
-          <div class="field"><label for="down-ms">Total ms down</label><input id="down-ms" type="number" inputmode="numeric" min="1" placeholder="e.g. 18300" data-conn></div>
-          <div class="field"><label for="travel-mm">Travel mm</label><input id="travel-mm" type="number" inputmode="numeric" min="1" placeholder="e.g. 500" data-conn></div>
+    <!-- 1. Heights -->
+    <div class="group">
+      <h2>Sitting and standing height</h2>
+      <div class="prof-cards">
+        <form class="card" data-pform="1" novalidate>
+          <div class="prof-head"><h3>Sitting</h3><span class="badge" data-pbadge>—</span></div>
+          <p class="big-val" data-pval>—</p>
+          <div class="field">
+            <label for="pf-1">New height (mm)</label>
+            <div class="inline">
+              <input id="pf-1" type="number" inputmode="decimal" min="735" max="1235" step="1" placeholder="735 – 1235" aria-describedby="pf-1-err" data-conn>
+              <button class="btn primary" type="submit" data-conn>Save</button>
+            </div>
+            <p class="field-error" id="pf-1-err" hidden></p>
+          </div>
+          <div class="actions"><button class="btn" type="button" data-conn data-usecur="1">Use current height</button></div>
+        </form>
+        <form class="card" data-pform="2" novalidate>
+          <div class="prof-head"><h3>Standing</h3><span class="badge" data-pbadge>—</span></div>
+          <p class="big-val" data-pval>—</p>
+          <div class="field">
+            <label for="pf-2">New height (mm)</label>
+            <div class="inline">
+              <input id="pf-2" type="number" inputmode="decimal" min="735" max="1235" step="1" placeholder="735 – 1235" aria-describedby="pf-2-err" data-conn>
+              <button class="btn primary" type="submit" data-conn>Save</button>
+            </div>
+            <p class="field-error" id="pf-2-err" hidden></p>
+          </div>
+          <div class="actions"><button class="btn" type="button" data-conn data-usecur="2">Use current height</button></div>
+        </form>
+      </div>
+      <div class="card">
+        <div class="split">
+          <div>
+            <h3>Desk buttons</h3>
+            <p id="mapping" class="hint">—</p>
+          </div>
+          <button class="btn" type="button" id="swap-btn" data-conn>Swap</button>
         </div>
-        <p class="field-error" id="config-err" hidden></p>
-        <div class="actions"><button class="btn primary" type="submit" data-conn>Save calibration</button></div>
+        <p class="hint" style="margin-top:8px">Short press moves to the height. Hold for 2 s to save the current height (LED blinks 3×).</p>
+      </div>
+    </div>
+
+    <!-- 2. Work day and auto switch -->
+    <div class="group">
+      <h2>Work day and auto switch</h2>
+      <div class="card">
+        <form id="today-form" novalidate>
+          <div class="field">
+            <label for="today-end">Today ends at</label>
+            <div class="inline">
+              <input id="today-end" type="time" aria-describedby="today-err today-hint" data-conn>
+              <button class="btn" type="submit" data-conn>Set</button>
+            </div>
+            <p class="field-error" id="today-err" hidden></p>
+            <p class="hint" id="today-hint">—</p>
+          </div>
+        </form>
+        <hr class="divider">
+        <form id="auto-form" novalidate>
+          <div class="stack">
+            <div class="field">
+              <label for="reg-end">Every other day ends at</label>
+              <input id="reg-end" type="time" data-conn>
+            </div>
+            <label class="switch">
+              <span>Auto switch<small>Alternates between sitting and standing while the work day runs.</small></span>
+              <input type="checkbox" id="auto-en" data-conn>
+            </label>
+            <div class="field">
+              <label for="interval">Switch every (minutes)</label>
+              <input id="interval" type="number" inputmode="numeric" min="5" max="480" step="1" data-conn>
+            </div>
+            <label class="switch">
+              <span>Auto-lock<small>Locks the desk with every auto switch. It stays locked until you unlock it; auto switch keeps moving it.</small></span>
+              <input type="checkbox" id="auto-lock" data-conn>
+            </label>
+            <p class="field-error" id="auto-err" hidden></p>
+            <div><button class="btn primary" type="submit" data-conn>Save</button></div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 3. Height accuracy -->
+    <div class="group">
+      <h2>Height accuracy</h2>
+      <p class="hint">The desk has no height sensor. It estimates the height from how long it has been moving, so the value drifts a little with every move.</p>
+      <div class="card">
+        <dl class="kv" style="margin-top:0">
+          <div><dt>Estimated height</dt><dd id="c-cur">—</dd></div>
+          <div><dt>Possible error</dt><dd id="c-err">—</dd></div>
+        </dl>
+        <h3>Fix the height</h3>
+        <p class="hint">Moving the desk all the way down or up (button held, or Go to 735 / 1235) resets the error by itself. Or tell it where it is:</p>
+        <form id="setpos-form" novalidate style="margin-top:12px">
+          <div class="field">
+            <label for="setpos">Measured height (mm) – the desk does not move</label>
+            <div class="inline">
+              <input id="setpos" type="number" inputmode="decimal" min="735" max="1235" step="1" placeholder="735 – 1235" aria-describedby="setpos-err" data-conn>
+              <button class="btn" type="submit" data-conn>Set</button>
+            </div>
+            <p class="field-error" id="setpos-err" hidden></p>
+          </div>
+        </form>
+        <div class="actions"><button class="btn" type="button" id="calib-btn" data-conn>Desk is at its lowest position</button></div>
+      </div>
+
+      <details class="card">
+        <summary>Speed calibration</summary>
+        <dl class="kv">
+          <div><dt>Up ms/mm</dt><dd id="c-up">—</dd></div>
+          <div><dt>Down ms/mm</dt><dd id="c-down">—</dd></div>
+          <div><dt>Travel</dt><dd id="c-travel">—</dd></div>
+        </dl>
+        <form id="config-form" novalidate>
+          <p class="hint">Time a full run from the lowest to the highest position and back, then enter both durations and the distance.</p>
+          <div class="form-grid" style="margin-top:12px">
+            <div class="field"><label for="up-ms">Total ms up</label><input id="up-ms" type="number" inputmode="numeric" min="1" placeholder="e.g. 21230" data-conn></div>
+            <div class="field"><label for="down-ms">Total ms down</label><input id="down-ms" type="number" inputmode="numeric" min="1" placeholder="e.g. 18300" data-conn></div>
+            <div class="field"><label for="travel-mm">Travel mm</label><input id="travel-mm" type="number" inputmode="numeric" min="1" placeholder="e.g. 500" data-conn></div>
+          </div>
+          <p class="field-error" id="config-err" hidden></p>
+          <div class="actions"><button class="btn primary" type="submit" data-conn>Save calibration</button></div>
+        </form>
+        <hr class="divider">
+        <form id="lag-form" novalidate>
+          <h3>Start lag</h3>
+          <p class="hint">Corrects short moves. Go up 20 mm ten times and measure the real travel. If each move falls x mm short, enter x × “Up ms/mm”. Same for down. Negative if the desk overshoots.</p>
+          <div class="form-grid" style="margin-top:12px">
+            <div class="field"><label for="lag-up">Lag up (ms)</label><input id="lag-up" type="number" inputmode="numeric" min="-500" max="2000" step="1" data-conn></div>
+            <div class="field"><label for="lag-down">Lag down (ms)</label><input id="lag-down" type="number" inputmode="numeric" min="-500" max="2000" step="1" data-conn></div>
+          </div>
+          <p class="field-error" id="lag-err" hidden></p>
+          <div class="actions"><button class="btn" type="submit" data-conn>Save lag</button></div>
+        </form>
+      </details>
+    </div>
+
+    <!-- 4. Device -->
+    <div class="group">
+      <h2>Device</h2>
+      <form class="card" id="rename-form" novalidate>
+        <div class="field">
+          <label for="hostname">Hostname</label>
+          <div class="inline">
+            <input id="hostname" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="31" aria-describedby="host-err host-hint" data-conn>
+            <button class="btn" type="submit" data-conn>Rename</button>
+          </div>
+          <p class="field-error" id="host-err" hidden></p>
+          <p class="hint" id="host-hint">Lowercase letters, digits and hyphens, up to 31 characters. The desk restarts after renaming.</p>
+        </div>
       </form>
     </div>
-
-    <div class="card narrow">
-      <h2>Reset height</h2>
-      <p class="hint">Sets the stored height to 735 mm. Only use this when the desk is at its lowest position.</p>
-      <div class="actions"><button class="btn" type="button" id="calib-btn" data-conn>Desk is at lowest position</button></div>
-    </div>
-
-    <form class="card narrow" id="setpos-form" novalidate>
-      <h2>Correct height</h2>
-      <p class="hint">Changes only the stored value. The desk does not move.</p>
-      <div class="field" style="margin-top:12px">
-        <label for="setpos">Actual height (mm)</label>
-        <div class="inline">
-          <input id="setpos" type="number" inputmode="decimal" min="735" max="1235" step="1" placeholder="735 – 1235" aria-describedby="setpos-err" data-conn>
-          <button class="btn" type="submit" data-conn>Set</button>
-        </div>
-        <p class="field-error" id="setpos-err" hidden></p>
-      </div>
-    </form>
   </section>
 </main>
 
@@ -692,6 +738,7 @@ const GRAFANA = {
 const MIN = 735, MAX = 1235;
 const DESK_RANGE_PX = 130;   // vertical travel of the tabletop in the drawing
 const NAMES = { 1: 'Sitting', 2: 'Standing' };
+const DRIFT_WARN_MM = 25;    // show the re-reference hint above this possible error
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -768,6 +815,8 @@ const ERRORS = {
   'locked': 'Desk is locked',
   'end time has already passed': 'That end time has already passed',
   'not found': 'Not found',
+  'auto switch is not running': 'Auto switch is not running',
+  'desk is moving': 'Wait until the desk has stopped',
 };
 function errMsg(e) {
   if (!e) return 'Something went wrong';
@@ -776,7 +825,6 @@ function errMsg(e) {
   const mapped = ERRORS[body.toLowerCase()];
   if (mapped) return mapped;
   if (e.status === 423) return 'Desk is locked';
-  if (e.status === 409) return 'Auto switch is not running';
   if (e.status === 404 && !body) return 'Profile not set';
   if (body && body.length < 120) return body.charAt(0).toUpperCase() + body.slice(1);
   return e.status ? `Request failed (${e.status})` : 'Something went wrong';
@@ -852,6 +900,13 @@ function fmtDuration(sec) {
   const h = Math.floor(min / 60), m = min % 60;
   return m ? `${h} h ${m} min` : `${h} h`;
 }
+function fmtAgo(sec) { return sec < 60 ? 'just now' : `${fmtDuration(sec)} ago`; }
+/** Sitting or standing? Uses the desk's threshold; older firmware has none. */
+function isStanding(s, mm = s.mm) {
+  if (typeof s.standThreshold === 'number') return mm >= s.standThreshold;
+  const p1 = profile(1), p2 = profile(2);
+  return !!(p1 && p2) && mm >= (p1.mm + p2.mm) / 2;
+}
 function parseMm(str) {
   const s = String(str).trim().replace(',', '.');
   if (!s) return { error: 'Enter a height in mm' };
@@ -862,7 +917,7 @@ function parseMm(str) {
 }
 function parseInt2(str, min, max, label) {
   const s = String(str).trim();
-  if (!/^\d+$/.test(s)) return { error: `${label}: enter a whole number` };
+  if (!/^-?\d+$/.test(s)) return { error: `${label}: enter a whole number` };
   const n = Number(s);
   if (n < min || n > max) return { error: `${label} must be between ${min} and ${max}` };
   return { value: n };
@@ -877,6 +932,9 @@ function setErr(id, msg, input) {
 function fillInput(input, value) {
   if (document.activeElement === input || input.dataset.dirty === '1') return;
   input.value = value == null ? '' : value;
+}
+function fillCheck(input, value) {
+  if (input.dataset.dirty !== '1') input.checked = !!value;
 }
 document.addEventListener('input', (e) => {
   if (e.target.matches('input')) e.target.dataset.dirty = '1';
@@ -981,7 +1039,12 @@ function selectDesk(host) {
 function nextDelay() {
   if (document.hidden) return 10000;
   const s = state.status;
-  if (state.online && s && (s.moving || s.pending != null)) return 400;
+  if (state.online && s) {
+    const a = s.auto || {};
+    // anything in motion or about to move: follow closely
+    if (s.moving || s.manual || s.pending != null || a.state === 'due' || a.state === 'moving') return 400;
+    if (typeof a.nextSwitchIn === 'number' && a.nextSwitchIn >= 0 && a.nextSwitchIn <= 60) return 1000;
+  }
   return 2000;
 }
 function schedule() {
@@ -1093,6 +1156,12 @@ function render() {
   if (cur) $('b-offline-host').textContent = cur.host;
   $('b-restart').hidden = !state.restarting;
   $('b-clock').hidden = !(connected && s.timeValid === false);
+  const drift = connected && typeof s.uncertainty === 'number' ? s.uncertainty : 0;
+  $('b-drift').hidden = !(drift >= DRIFT_WARN_MM);
+  if (drift >= DRIFT_WARN_MM) {
+    $('b-drift-text').textContent =
+      `The shown height may be off by about ${round(drift)} mm. Move the desk all the way down once to reset it.`;
+  }
 
   // enable/disable
   const locked = !!(s && s.locked);
@@ -1129,6 +1198,35 @@ function fitDeskView() { $('desk-svg').setAttribute('viewBox', wideMQ.matches ? 
 fitDeskView();
 if (wideMQ.addEventListener) wideMQ.addEventListener('change', fitDeskView);
 
+/** What the auto switch is doing right now, as reported by the desk. */
+function autoInfo(s) {
+  const a = s.auto || {};
+  const on = !!(a.enabled && s.working);
+  // older firmware has no state: derive the basics
+  const st = a.state || (!on ? 'off' : (profile(1) && profile(2)) ? 'waiting' : 'unconfigured');
+  const n = typeof a.nextSwitchIn === 'number' ? a.nextSwitchIn : -1;
+  let what = '';
+  if (a.nextTarget != null) what = isStanding(s, a.nextTarget) ? 'stand up' : 'sit down';
+
+  let text = '', canSkip = false;
+  if (st === 'unconfigured') text = 'Set a sitting and a standing height first';
+  else if (st === 'moving') text = `Switching now – moving to ${round(s.target)} mm`;
+  else if (st === 'due') { text = 'Due now – starts once all buttons are released'; canSkip = true; }
+  else if (st === 'waiting' && n >= 0) { text = `Next: ${what || 'switch'} in ${fmtDuration(n)}`; canSkip = true; }
+  else if (st === 'waiting') text = 'No switch planned';
+
+  let last = '';
+  const l = a.last;
+  if (l && l.result) {
+    const when = fmtAgo(l.ago || 0);
+    if (l.result === 'done') last = `Last switch: reached ${round(l.mm)} mm, ${when}`;
+    else if (l.result === 'interrupted') last = `Last switch: stopped at ${round(l.mm)} mm, ${when}`;
+    else if (l.result === 'skipped') last = `Last switch: skipped, ${when}`;
+    else if (l.result === 'noop') last = `Last switch: nothing to do, ${when}`;
+  }
+  return { on, st, n, text, last, canSkip, lockAfter: !!a.lockAfter, nextTarget: a.nextTarget };
+}
+
 function renderControl() {
   const s = state.status;
   const svg = $('desk-svg');
@@ -1155,6 +1253,7 @@ function renderControl() {
   }
 
   const mm = round(s.mm);
+  const auto = autoInfo(s);
   num.classList.remove('placeholder');
   num.textContent = String(mm);
   $('mm-unit').hidden = false;
@@ -1172,11 +1271,16 @@ function renderControl() {
     const up = s.target > s.mm;
     vis = up ? 'up' : 'down';
     if (s.correcting) { key = 'corr'; text = `Returning to ${tgt} mm`; cls += ' correcting'; }
-    else { key = 'move' + vis; text = `Moving ${vis} to ${tgt} mm`; cls += ' active'; }
+    else {
+      key = 'move' + vis;
+      text = `${auto.st === 'moving' ? 'Auto switch: moving' : 'Moving'} ${vis} to ${tgt} mm`;
+      cls += ' active';
+    }
+  } else if (s.manual) {
+    key = 'manual'; text = 'Moving by desk button'; cls += ' active';
   } else {
-    const p1 = profile(1), p2 = profile(2);
-    if (p2 && Math.abs(s.mm - p2.mm) <= 2) text = 'At standing height';
-    else if (p1 && Math.abs(s.mm - p1.mm) <= 2) text = 'At sitting height';
+    // at rest: sitting or standing, decided by the threshold between both heights
+    text = isStanding(s) ? 'Standing' : 'Sitting';
   }
   svg.dataset.state = vis;
   svg.classList.toggle('correcting', !!(s.moving && s.correcting && !s.pending));
@@ -1194,9 +1298,7 @@ function renderControl() {
   renderPresets();
 
   // lock
-  $('lock-text').textContent = s.locked
-    ? (s.lockRemaining > 0 ? `Locked, ${fmtDuration(s.lockRemaining)} left` : 'Locked')
-    : 'Unlocked';
+  $('lock-text').textContent = s.locked ? 'Locked' : 'Unlocked';
   const lb = $('lock-btn');
   lb.textContent = s.locked ? 'Unlock' : 'Lock';
   lb.setAttribute('aria-pressed', s.locked ? 'true' : 'false');
@@ -1207,35 +1309,26 @@ function renderControl() {
   $('day-text').textContent = s.working ? (s.dayEnd ? `Working until ${s.dayEnd}` : 'Working') : 'Not working';
   $('day-btn').textContent = s.working ? 'End day' : 'Start day';
 
-  // auto switch
-  const a = s.auto || {};
-  const autoOn = !!(a.enabled && s.working);
-  $('auto-row').hidden = !autoOn;
-  const p1 = profile(1), p2 = profile(2);
-  const skipBtn = $('auto-skip');
-  if (autoOn) {
-    if (!p1 || !p2) {
-      $('auto-text').textContent = 'Set both profiles to use auto switch';
-      skipBtn.hidden = true;
-    } else if (a.nextSwitchIn >= 0) {
-      let what = `move to ${round(a.nextTarget)} mm`;
-      if (a.nextTarget != null && Math.abs(a.nextTarget - p2.mm) < 1) what = 'stand up';
-      else if (a.nextTarget != null && Math.abs(a.nextTarget - p1.mm) < 1) what = 'sit down';
-      $('auto-text').textContent = `Next: ${what} in ${fmtDuration(a.nextSwitchIn)}`;
-      skipBtn.hidden = false;
-    } else {
-      $('auto-text').textContent = 'No switch planned';
-      skipBtn.hidden = true;
-    }
+  // auto switch: what it does now, and how the last one really ended
+  $('auto-row').hidden = !auto.on;
+  if (auto.on) {
+    $('auto-text').textContent = auto.text;
+    $('auto-last').textContent = auto.last;
+    $('auto-last').hidden = !auto.last;
+    $('auto-skip').hidden = !auto.canSkip;
   }
 
   // pre-warning
-  const n = typeof a.nextSwitchIn === 'number' ? a.nextSwitchIn : -1;
+  const n = auto.n;
   if (n === -1 || n > 90) state.warned = false;
-  const warnNow = autoOn && p1 && p2 && n >= 0 && n <= 60 && !s.moving && a.nextTarget != null;
+  const due = auto.st === 'due';
+  const warnNow = auto.on && (due || (auto.st === 'waiting' && n >= 0 && n <= 60)) && !s.moving && auto.nextTarget != null;
   $('prealert').hidden = !warnNow;
   if (warnNow) {
-    const msg = `Desk moves to ${round(a.nextTarget)} mm in ${n} s`;
+    const where = `${round(auto.nextTarget)} mm`;
+    const msg = due
+      ? `Auto switch to ${where} is due – release the desk buttons`
+      : `Desk moves to ${where} in ${n} s${auto.lockAfter && !s.locked ? ' and locks' : ''}`;
     $('prealert-text').textContent = msg;
     if (!state.warned) { state.warned = true; beep(); announce(msg); }
   }
@@ -1292,31 +1385,35 @@ function renderDay() {
   const ok = state.online === true && s;
   if (ok) {
     $('today-hint').textContent = s.working
-      ? (s.dayEnd ? `Working until ${s.dayEnd}.` : 'Work day is running.')
-      : 'Not working. Setting an end time starts the work day.';
+      ? (s.dayEnd ? `Working until ${s.dayEnd}.` : 'Work day is running without an end time.')
+      : 'Not working. Setting a time starts the work day.';
     fillInput($('today-end'), s.dayEnd || (st && st.regularEnd) || '');
   } else {
     $('today-hint').textContent = '—';
   }
   if (st) {
     fillInput($('reg-end'), st.regularEnd || '');
-    const cb = $('auto-en');
-    if (cb.dataset.dirty !== '1') cb.checked = !!st.autoEnabled;
+    fillCheck($('auto-en'), st.autoEnabled);
     fillInput($('interval'), st.interval);
-    fillInput($('lockmin'), st.lockMin);
+    fillCheck($('auto-lock'), st.lockAfter);
   }
 }
 
 function renderSettings() {
   const s = state.status, st = state.settings, c = state.config;
+  const ok = state.online === true && s;
   fillInput($('hostname'), (st && st.name) || (s && s.name) || (state.cur && state.cur.host) || '');
   if (c) {
     $('c-up').textContent = Number(c.upMsPerMm).toFixed(2);
     $('c-down').textContent = Number(c.downMsPerMm).toFixed(2);
     $('c-travel').textContent = `${round(c.maxHeightMm - c.minHeightMm)} mm`;
+    fillInput($('lag-up'), c.upLagMs != null ? round(c.upLagMs) : '');
+    fillInput($('lag-down'), c.downLagMs != null ? round(c.downLagMs) : '');
   }
-  const curMm = s && state.online ? s.mm : c ? c.currentMm : null;
+  const curMm = ok ? s.mm : c ? c.currentMm : null;
+  const err = ok ? s.uncertainty : c ? c.uncertainty : null;
   $('c-cur').textContent = curMm != null ? `${round(curMm)} mm` : '—';
+  $('c-err').textContent = err != null ? (err < 1 ? 'none' : `± ${round(err)} mm`) : '—';
 }
 
 /* ======= Stats ======= */
@@ -1353,6 +1450,7 @@ $('range').addEventListener('click', (e) => {
 darkMQ.addEventListener && darkMQ.addEventListener('change', renderStats);
 
 /* ======= Tabs ======= */
+const TAB_ALIAS = { profiles: 'settings', day: 'settings' };   // old links
 function initTabs() {
   if (statsEnabled()) $('t-stats').hidden = false;
   const tabs = () => $$('.tab').filter((t) => !t.hidden);
@@ -1377,6 +1475,7 @@ function initTabs() {
   showTab(location.hash.slice(1), false);
 }
 function showTab(name, push) {
+  name = TAB_ALIAS[name] || name;
   const valid = $$('.tab').filter((t) => !t.hidden).map((t) => t.dataset.tab);
   if (!valid.includes(name)) name = 'control';
   state.tab = name;
@@ -1389,7 +1488,6 @@ function showTab(name, push) {
   if (push && location.hash.slice(1) !== name) history.replaceState(null, '', '#' + name);
   if (!state.cur) return;
   if (name === 'settings') { loadConfig(); if (!state.settings) loadSettings(); }
-  if (name === 'day' && !state.settings) loadSettings();
   if (name === 'stats') renderStats();
 }
 
@@ -1442,7 +1540,7 @@ $('goto-form').addEventListener('submit', async (e) => {
   if (res.ok) { inp.value = ''; clean(inp); }
 });
 
-/* ======= Profiles ======= */
+/* ======= Heights ======= */
 $$('[data-pform]').forEach((f) => {
   f.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -1479,7 +1577,7 @@ $('swap-btn').addEventListener('click', async (e) => {
   }
 });
 
-/* ======= Work day ======= */
+/* ======= Work day and auto switch ======= */
 $('today-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const inp = $('today-end');
@@ -1496,27 +1594,86 @@ $('auto-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const reg = $('reg-end').value.trim();
   const iv = parseInt2($('interval').value, 5, 480, 'Interval');
-  const lm = parseInt2($('lockmin').value, 0, 240, 'Lock time');
   let err = '';
-  if (!TIME_RE.test(reg)) err = 'Enter the normal end time as HH:MM';
+  if (!TIME_RE.test(reg)) err = 'Enter the usual end time as HH:MM';
   else if (iv.error) err = iv.error;
-  else if (lm.error) err = lm.error;
   setErr('auto-err', err);
   $('reg-end').setAttribute('aria-invalid', !TIME_RE.test(reg) ? 'true' : 'false');
   $('interval').setAttribute('aria-invalid', iv.error ? 'true' : 'false');
-  $('lockmin').setAttribute('aria-invalid', lm.error ? 'true' : 'false');
   if (err) return;
-  const params = { regularEnd: reg, autoEnabled: $('auto-en').checked ? 1 : 0, interval: iv.value, lockMin: lm.value };
+  const params = {
+    regularEnd: reg,
+    autoEnabled: $('auto-en').checked ? 1 : 0,
+    interval: iv.value,
+    lockAfter: $('auto-lock').checked ? 1 : 0,
+  };
   const btn = e.currentTarget.querySelector('button[type="submit"]');
   const g = state.gen;
-  const res = await act(btn, '/settings' + qs(params), 'Schedule saved');
+  const res = await act(btn, '/settings' + qs(params), 'Saved');
   if (res.ok && g === state.gen) {
-    ['reg-end', 'auto-en', 'interval', 'lockmin'].forEach((id) => clean($(id)));
+    ['reg-end', 'auto-en', 'interval', 'auto-lock'].forEach((id) => clean($(id)));
     if (res.data && typeof res.data === 'object') { state.settings = res.data; renderDay(); }
   }
 });
 
-/* ======= Settings ======= */
+/* ======= Height accuracy ======= */
+$('setpos-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const inp = $('setpos');
+  const r = parseMm(inp.value);
+  setErr('setpos-err', r.error, inp);
+  if (r.error) { inp.focus(); return; }
+  if (!confirm(`Set the stored height to ${r.value} mm? The desk does not move.`)) return;
+  const btn = e.currentTarget.querySelector('button[type="submit"]');
+  const res = await act(btn, '/setposition' + qs({ mm: r.value }), `Stored height set to ${r.value} mm`);
+  if (res.ok) { inp.value = ''; clean(inp); loadConfig(); }
+});
+
+$('calib-btn').addEventListener('click', async (e) => {
+  if (!confirm('Set the stored height to 735 mm? Only do this when the desk is at its lowest position.')) return;
+  const res = await act(e.currentTarget, '/calibrate', 'Height reset to 735 mm');
+  if (res.ok) loadConfig();
+});
+
+$('config-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fields = [['up-ms', 'Total ms up'], ['down-ms', 'Total ms down'], ['travel-mm', 'Travel mm']];
+  let err = '';
+  const vals = {};
+  for (const [id, label] of fields) {
+    const inp = $(id);
+    const n = Number(inp.value.trim());
+    const bad = !inp.value.trim() || !Number.isFinite(n) || n <= 0;
+    inp.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    if (bad && !err) err = `${label}: enter a positive number`;
+    vals[id] = Math.round(n);
+  }
+  if (!err && vals['travel-mm'] > MAX - MIN + 50) err = `Travel mm looks too large (range is ${MAX - MIN} mm)`;
+  setErr('config-err', err);
+  if (err) return;
+  const btn = e.currentTarget.querySelector('button[type="submit"]');
+  const res = await act(btn, '/config' + qs({ upMs: vals['up-ms'], downMs: vals['down-ms'], travelMm: vals['travel-mm'] }), 'Calibration saved');
+  if (res.ok) {
+    fields.forEach(([id]) => { $(id).value = ''; clean($(id)); });
+    loadConfig();
+  }
+});
+
+$('lag-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const up = parseInt2($('lag-up').value, -500, 2000, 'Lag up');
+  const down = parseInt2($('lag-down').value, -500, 2000, 'Lag down');
+  const err = up.error || down.error || '';
+  setErr('lag-err', err);
+  $('lag-up').setAttribute('aria-invalid', up.error ? 'true' : 'false');
+  $('lag-down').setAttribute('aria-invalid', down.error ? 'true' : 'false');
+  if (err) return;
+  const btn = e.currentTarget.querySelector('button[type="submit"]');
+  const res = await act(btn, '/config' + qs({ upLagMs: up.value, downLagMs: down.value }), 'Lag saved');
+  if (res.ok) { clean($('lag-up')); clean($('lag-down')); loadConfig(); }
+});
+
+/* ======= Device ======= */
 const HOST_RE = /^[a-z0-9](?:[a-z0-9-]{0,29}[a-z0-9])?$/;
 $('rename-form').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -1567,48 +1724,6 @@ $('rename-form').addEventListener('submit', async (e) => {
   }, 6000);
 });
 $('b-rename-dismiss').addEventListener('click', () => { $('b-rename').hidden = true; });
-
-$('config-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const fields = [['up-ms', 'Total ms up'], ['down-ms', 'Total ms down'], ['travel-mm', 'Travel mm']];
-  let err = '';
-  const vals = {};
-  for (const [id, label] of fields) {
-    const inp = $(id);
-    const n = Number(inp.value.trim());
-    const bad = !inp.value.trim() || !Number.isFinite(n) || n <= 0;
-    inp.setAttribute('aria-invalid', bad ? 'true' : 'false');
-    if (bad && !err) err = `${label}: enter a positive number`;
-    vals[id] = Math.round(n);
-  }
-  if (!err && vals['travel-mm'] > MAX - MIN + 50) err = `Travel mm looks too large (range is ${MAX - MIN} mm)`;
-  setErr('config-err', err);
-  if (err) return;
-  const btn = e.currentTarget.querySelector('button[type="submit"]');
-  const res = await act(btn, '/config' + qs({ upMs: vals['up-ms'], downMs: vals['down-ms'], travelMm: vals['travel-mm'] }), 'Calibration saved');
-  if (res.ok) {
-    fields.forEach(([id]) => { $(id).value = ''; clean($(id)); });
-    loadConfig();
-  }
-});
-
-$('calib-btn').addEventListener('click', async (e) => {
-  if (!confirm('Set the stored height to 735 mm? Only do this when the desk is at its lowest position.')) return;
-  const res = await act(e.currentTarget, '/calibrate', 'Height reset to 735 mm');
-  if (res.ok) loadConfig();
-});
-
-$('setpos-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const inp = $('setpos');
-  const r = parseMm(inp.value);
-  setErr('setpos-err', r.error, inp);
-  if (r.error) { inp.focus(); return; }
-  if (!confirm(`Set the stored height to ${r.value} mm? The desk does not move.`)) return;
-  const btn = e.currentTarget.querySelector('button[type="submit"]');
-  const res = await act(btn, '/setposition' + qs({ mm: r.value }), `Stored height set to ${r.value} mm`);
-  if (res.ok) { inp.value = ''; clean(inp); loadConfig(); }
-});
 
 init();
 </script>

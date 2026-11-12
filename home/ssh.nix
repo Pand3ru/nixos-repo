@@ -32,5 +32,17 @@
       User = "panderu";
       IdentityFile = "~/.ssh/serverKey";
     };
+
+    # Initramfs sshd, only opens the LUKS passphrase prompt (hosts/server/configuration.nix)
+    homelab-unlock = {
+      HostName = "192.168.50.203"; # initrd has no WireGuard, LAN only
+      Port = 2222;
+      User = "root";
+      IdentityFile = "~/.ssh/server_initramfs";
+      IdentitiesOnly = "yes";
+      RequestTTY = "yes";
+    };
   };
+
+  home.shellAliases.unlock = "ssh homelab-unlock";
 }
