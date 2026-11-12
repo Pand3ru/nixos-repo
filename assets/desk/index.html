@@ -1722,10 +1722,10 @@ $('lag-form').addEventListener('submit', async (e) => {
 // You move the desk with its own buttons and read a tape measure; the desk reports how long each
 // press lasted (status.lastManual). The firmware models a press as  time = lag + mm · msPerMm,
 // so one short and one long press per direction give two equations for the two unknowns.
-// The long moves are sized so that none of them ends at an end stop (0 → 20 → 370 → 350 → 50 mm).
+// Readings are absolute tape heights; the bottom stop is MIN (735 mm).
+// The long moves are sized so that none of them ends at an end stop (735 → 755 → 1105 → 1085 → 785 mm).
 const CAL_STEPS = [
   { kind: 'home' },
-  { kind: 'read' },
   { kind: 'press', up: true, approx: 20 },
   { kind: 'press', up: true, approx: 350 },
   { kind: 'press', up: false, approx: 20 },
@@ -1736,7 +1736,7 @@ const CAL_STOP_MARGIN_MM = 15;   // closer than this to an end stop, the press t
 
 function calSupported(s) { return !!s && 'lastManual' in s; }
 function calSeq(s) { return (s && s.lastManual && s.lastManual.seq) || 0; }
-function calFinalMm() { return clampMm(round(MIN + (cal.last - cal.h0))); }
+function calFinalMm() { return clampMm(round(cal.last)); }
 
 async function calStart() {
   const s = state.status;
@@ -1744,7 +1744,7 @@ async function calStart() {
   const btn = $('cal-start');
   const c = {
     desk: state.cur, step: 0, base: 0, press: null, error: '', focus: false,
-    h0: 0, last: 0, d: [], t: [], result: null,
+    last: MIN, d: [], t: [], result: null,
     restore: { locked: !!s.locked, auto: !!(s.auto && s.auto.enabled) },
   };
   btn.dataset.busy = '1'; btn.disabled = true;
@@ -1772,7 +1772,7 @@ function calEnter(step) {
   cal.press = null;
   cal.error = '';
   cal.base = calSeq(state.status);   // presses up to here belong to earlier steps
-  cal.focus = CAL_STEPS[step].kind === 'read';
+  cal.focus = false;
   const inp = $('cal-h');
   inp.value = ''; clean(inp); inp.removeAttribute('aria-invalid');
   if (CAL_STEPS[step].kind === 'result') calShowResult();
@@ -1817,7 +1817,7 @@ function calCheck(st, d, v) {
   if (d <= 0) return `The tape shows no move ${st.up ? 'up' : 'down'}.`;
   if (st.approx < 100 && (d < 5 || d > 60)) return `That was ${d} mm, aim for about ${st.approx} mm.`;
   if (st.approx >= 100 && d < 150) return `That was only ${d} mm, aim for about ${st.approx} mm.`;
-  const above = v - cal.h0;
+  const above = v - MIN;
   if (st.up ? above > MAX - MIN - CAL_STOP_MARGIN_MM : above < CAL_STOP_MARGIN_MM) {
     return 'That ended at the end stop, where the desk stands still while the button is held.';
   }
@@ -1872,16 +1872,13 @@ function renderCal() {
   const p = cal.press;
   let title, text, form = false;
   if (st.kind === 'home') {
-    title = 'Move the desk to the bottom';
-    text = 'Hold the DOWN button on the desk until it stops at its lowest position, then confirm below.';
-  } else if (st.kind === 'read') {
-    title = 'Read the starting height';
-    text = 'Hold the tape measure next to the desk and read the height of the tabletop. Use the same spot for every reading, half millimetres are fine.';
-    form = true;
+    title = `Move the desk to the bottom (${MIN} mm)`;
+    text = `Hold the DOWN button on the desk until it stops at its lowest position, then confirm below. Keep the tape measure next to the desk, every reading is the tabletop height from the floor (${MIN} mm at the bottom).`;
   } else if (st.kind === 'press') {
-    title = `${st.up ? 'Up' : 'Down'} about ${st.approx} mm`;
+    const target = round(cal.last + (st.up ? st.approx : -st.approx));
+    title = `${st.up ? 'Up' : 'Down'} to about ${target} mm`;
     if (!p) {
-      text = `Hold the ${st.up ? 'UP' : 'DOWN'} button until the desk has moved about ${st.approx} mm on the tape, then let go. One press, no extra taps.`;
+      text = `Hold the ${st.up ? 'UP' : 'DOWN'} button until the tape shows about ${target} mm (${st.approx} mm ${st.up ? 'up' : 'down'} from ${round(cal.last)} mm), then let go. One press, no extra taps.`;
     } else if (p.error) {
       text = `${p.error} Enter where the desk is now, then do this step again from there.`;
       form = true;
@@ -1925,7 +1922,9 @@ $('cal-home').addEventListener('click', async (e) => {
   try { await api('/calibrate', 'POST', c.desk); }   // bottom stop = 735 mm, error 0
   catch (err) { toast(errMsg(err), true); return; }
   finally { delete btn.dataset.busy; }
-  if (cal === c) calEnter(1);
+  if (cal !== c) return;
+  c.last = MIN;
+  calEnter(1);
 });
 
 $('cal-form').addEventListener('submit', (e) => {
@@ -1941,7 +1940,6 @@ $('cal-form').addEventListener('submit', (e) => {
     render();
     return;
   }
-  if (st.kind === 'read') { cal.h0 = v; cal.last = v; calEnter(cal.step + 1); return; }
   if (st.kind !== 'press' || !cal.press) return;
   if (cal.press.error) { cal.last = v; calEnter(cal.step); return; }   // new starting point, same step
 
