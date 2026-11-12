@@ -328,6 +328,13 @@ details.card > summary::after {
 }
 details.card[open] > summary::after { transform: rotate(-135deg); }
 details.card[open] > summary { margin-bottom: 12px; }
+.subdetails { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+.subdetails > summary { cursor: pointer; font-weight: 600; color: var(--text-dim); min-height: 28px; }
+.subdetails[open] > summary { margin-bottom: 4px; }
+.cal { display: flex; flex-direction: column; gap: 10px; }
+.cal-step { margin: 0; font-size: 0.8rem; color: var(--text-dim); letter-spacing: 0.04em; text-transform: uppercase; }
+.cal-live { margin: 0; color: var(--accent); font-weight: 600; }
+.cal .kv { margin: 4px 0 0; }
 
 /* ---------- Stats ---------- */
 .seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; }
@@ -666,13 +673,46 @@ a { color: var(--accent); }
         <div class="actions"><button class="btn" type="button" id="calib-btn" data-conn>Desk is at its lowest position</button></div>
       </div>
 
-      <details class="card">
+      <details class="card" id="speed-card">
         <summary>Speed calibration</summary>
         <dl class="kv">
           <div><dt>Up ms/mm</dt><dd id="c-up">—</dd></div>
           <div><dt>Down ms/mm</dt><dd id="c-down">—</dd></div>
           <div><dt>Travel</dt><dd id="c-travel">—</dd></div>
         </dl>
+
+        <div id="cal-intro">
+          <p class="hint">Guided: you move the desk with its own buttons and read a tape measure, the desk times every press. Takes about 3 minutes. The lock and auto switch are paused meanwhile.</p>
+          <div class="actions"><button class="btn primary" type="button" id="cal-start" data-conn>Start guided calibration</button></div>
+          <p class="hint" id="cal-fw" hidden style="margin-top:8px">Needs a desk firmware that reports button press times (<code>lastManual</code> in /status).</p>
+        </div>
+
+        <div class="cal" id="cal" hidden>
+          <p class="cal-step" id="cal-step"></p>
+          <h3 id="cal-title"></h3>
+          <p class="hint" id="cal-text"></p>
+          <p class="cal-live" id="cal-live" hidden>Button held…</p>
+          <form id="cal-form" novalidate hidden>
+            <div class="field">
+              <label for="cal-h">Height on the tape now (mm)</label>
+              <div class="inline">
+                <input id="cal-h" type="number" inputmode="decimal" step="0.5" aria-describedby="cal-err" data-conn>
+                <button class="btn primary" type="submit" data-conn>Next</button>
+              </div>
+            </div>
+          </form>
+          <p class="field-error" id="cal-err" hidden></p>
+          <dl class="kv" id="cal-result" hidden></dl>
+          <div class="actions">
+            <button class="btn primary" type="button" id="cal-home" data-conn>It is at the bottom</button>
+            <button class="btn primary" type="button" id="cal-save" data-conn>Save calibration</button>
+            <button class="btn" type="button" id="cal-redo" data-conn>Start over</button>
+            <button class="btn ghost" type="button" id="cal-cancel">Cancel</button>
+          </div>
+        </div>
+
+        <details class="subdetails">
+          <summary>Manual values</summary>
         <form id="config-form" novalidate>
           <p class="hint">Time a full run from the lowest to the highest position and back, then enter both durations and the distance.</p>
           <div class="form-grid" style="margin-top:12px">
@@ -694,6 +734,7 @@ a { color: var(--accent); }
           <p class="field-error" id="lag-err" hidden></p>
           <div class="actions"><button class="btn" type="submit" data-conn>Save lag</button></div>
         </form>
+        </details>
       </details>
     </div>
 
@@ -763,6 +804,7 @@ const state = {
   tab: 'control',
   statsFrom: 'now/d',
 };
+let cal = null;        // guided calibration in progress, see "Guided calibration"
 
 /* ======= API ======= */
 class ApiError extends Error {
@@ -1018,6 +1060,7 @@ async function probeOthers() {
 
 function selectDesk(host) {
   const d = state.desks.find((x) => x.host === host) || state.desks[0];
+  if (cal && cal.desk !== d) calEnd('Calibration cancelled');
   state.gen++;
   clearTimeout(state.timer);
   Object.assign(state, {
@@ -1063,6 +1106,7 @@ async function poll() {
     if (g !== state.gen) return;
     if (!s || typeof s !== 'object') throw new Error('bad status');
     state.status = s;
+    calTrack(s);
     state.fails = 0;
     state.online = true;
     state.cur.online = true;
@@ -1173,6 +1217,7 @@ function render() {
   renderProfiles();
   renderDay();
   renderSettings();
+  renderCal();
 }
 
 function setDesk(mm, target, moving) {
@@ -1671,6 +1716,277 @@ $('lag-form').addEventListener('submit', async (e) => {
   const btn = e.currentTarget.querySelector('button[type="submit"]');
   const res = await act(btn, '/config' + qs({ upLagMs: up.value, downLagMs: down.value }), 'Lag saved');
   if (res.ok) { clean($('lag-up')); clean($('lag-down')); loadConfig(); }
+});
+
+/* ======= Guided calibration ======= */
+// You move the desk with its own buttons and read a tape measure; the desk reports how long each
+// press lasted (status.lastManual). The firmware models a press as  time = lag + mm · msPerMm,
+// so one short and one long press per direction give two equations for the two unknowns.
+// The long moves are sized so that none of them ends at an end stop (0 → 20 → 370 → 350 → 50 mm).
+const CAL_STEPS = [
+  { kind: 'home' },
+  { kind: 'read' },
+  { kind: 'press', up: true, approx: 20 },
+  { kind: 'press', up: true, approx: 350 },
+  { kind: 'press', up: false, approx: 20 },
+  { kind: 'press', up: false, approx: 300 },
+  { kind: 'result' },
+];
+const CAL_STOP_MARGIN_MM = 15;   // closer than this to an end stop, the press time includes standing still
+
+function calSupported(s) { return !!s && 'lastManual' in s; }
+function calSeq(s) { return (s && s.lastManual && s.lastManual.seq) || 0; }
+function calFinalMm() { return clampMm(round(MIN + (cal.last - cal.h0))); }
+
+async function calStart() {
+  const s = state.status;
+  if (cal || !calSupported(s) || s.moving || s.manual) return;
+  const btn = $('cal-start');
+  const c = {
+    desk: state.cur, step: 0, base: 0, press: null, error: '', focus: false,
+    h0: 0, last: 0, d: [], t: [], result: null,
+    restore: { locked: !!s.locked, auto: !!(s.auto && s.auto.enabled) },
+  };
+  btn.dataset.busy = '1'; btn.disabled = true;
+  try {
+    // A locked desk ignores its buttons, and an auto switch would move it mid-measurement
+    if (c.restore.locked) await api('/unlock', 'POST', c.desk);
+    if (c.restore.auto) await api('/settings' + qs({ autoEnabled: 0 }), 'POST', c.desk);
+  } catch (e) {
+    toast(errMsg(e), true);
+    await calRestore(c);
+    return;
+  } finally {
+    delete btn.dataset.busy;
+  }
+  if (c.desk !== state.cur) { await calRestore(c); return; }
+  cal = c;
+  $('speed-card').open = true;
+  if (!state.config) loadConfig();
+  calEnter(0);
+  poll();
+}
+
+function calEnter(step) {
+  cal.step = step;
+  cal.press = null;
+  cal.error = '';
+  cal.base = calSeq(state.status);   // presses up to here belong to earlier steps
+  cal.focus = CAL_STEPS[step].kind === 'read';
+  const inp = $('cal-h');
+  inp.value = ''; clean(inp); inp.removeAttribute('aria-invalid');
+  if (CAL_STEPS[step].kind === 'result') calShowResult();
+  render();
+}
+
+async function calRestore(c) {
+  try {
+    if (c.restore.auto) await api('/settings' + qs({ autoEnabled: 1 }), 'POST', c.desk);
+    if (c.restore.locked) await api('/lock', 'POST', c.desk);
+  } catch (e) {
+    toast(`Could not restore lock / auto switch on ${c.desk.host}: ${errMsg(e)}`, true);
+  }
+}
+
+async function calEnd(msg, error = false) {
+  const c = cal;
+  if (!c) return;
+  cal = null;
+  render();
+  await calRestore(c);
+  if (msg) toast(msg, error);
+  if (c.desk === state.cur) { loadSettings(); poll(); }
+}
+
+/** Called with every status poll: picks up the press of the current step once the button is released. */
+function calTrack(s) {
+  if (!cal || cal.desk !== state.cur || !calSupported(s)) return;
+  const seq = calSeq(s);
+  if (seq < cal.base) { calEnd('The desk restarted, calibration cancelled', true); return; }
+  const st = CAL_STEPS[cal.step];
+  if (st.kind !== 'press' || cal.press || s.manual || seq === cal.base) return;
+  const m = s.lastManual;
+  if (seq - cal.base > 1) cal.press = { error: 'The desk saw more than one press.' };
+  else if (m.up !== st.up) cal.press = { error: `That press went ${m.up ? 'up' : 'down'}.` };
+  else cal.press = { ms: m.ms };
+  cal.error = '';
+  cal.focus = true;
+}
+
+function calCheck(st, d, v) {
+  if (d <= 0) return `The tape shows no move ${st.up ? 'up' : 'down'}.`;
+  if (st.approx < 100 && (d < 5 || d > 60)) return `That was ${d} mm, aim for about ${st.approx} mm.`;
+  if (st.approx >= 100 && d < 150) return `That was only ${d} mm, aim for about ${st.approx} mm.`;
+  const above = v - cal.h0;
+  if (st.up ? above > MAX - MIN - CAL_STOP_MARGIN_MM : above < CAL_STOP_MARGIN_MM) {
+    return 'That ended at the end stop, where the desk stands still while the button is held.';
+  }
+  return '';
+}
+
+function calFit(tA, dA, tB, dB) {
+  const k = (tB - tA) / (dB - dA);
+  return { k, lag: tA - dA * k };
+}
+
+function calShowResult() {
+  const [tA, tB, tC, tD] = cal.t, [dA, dB, dC, dD] = cal.d;
+  const up = calFit(tA, dA, tB, dB), down = calFit(tC, dC, tD, dD);
+  // Same limits as the firmware's /config
+  const ok = (r) => Number.isFinite(r.k) && r.k >= 15 && r.k <= 100 && r.lag >= -500 && r.lag <= 2000;
+  cal.result = { up, down, bad: !ok(up) || !ok(down) };
+  const c = state.config;
+  const lag = (v) => (v != null ? `${round(v)} ms` : null);
+  const rows = [
+    ['Up ms/mm', c && Number(c.upMsPerMm).toFixed(2), up.k.toFixed(2)],
+    ['Down ms/mm', c && Number(c.downMsPerMm).toFixed(2), down.k.toFixed(2)],
+    ['Lag up', c && lag(c.upLagMs), lag(up.lag)],
+    ['Lag down', c && lag(c.downLagMs), lag(down.lag)],
+  ];
+  const dl = $('cal-result');
+  dl.textContent = '';
+  for (const [label, old, now] of rows) {
+    const div = document.createElement('div');
+    const dt = document.createElement('dt');
+    const dd = document.createElement('dd');
+    dt.textContent = label;
+    dd.textContent = old ? `${old} → ${now}` : now;
+    div.append(dt, dd);
+    dl.appendChild(div);
+  }
+}
+
+function renderCal() {
+  const s = state.status;
+  const connected = state.online === true && !!s && !state.restarting;
+  $('cal-intro').hidden = !!cal;
+  $('cal').hidden = !cal;
+  if (!cal) {
+    $('cal-fw').hidden = !connected || calSupported(s);
+    const b = $('cal-start');
+    b.disabled = b.disabled || !calSupported(s) || s.moving || s.manual;
+    return;
+  }
+
+  const st = CAL_STEPS[cal.step];
+  const p = cal.press;
+  let title, text, form = false;
+  if (st.kind === 'home') {
+    title = 'Move the desk to the bottom';
+    text = 'Hold the DOWN button on the desk until it stops at its lowest position, then confirm below.';
+  } else if (st.kind === 'read') {
+    title = 'Read the starting height';
+    text = 'Hold the tape measure next to the desk and read the height of the tabletop. Use the same spot for every reading, half millimetres are fine.';
+    form = true;
+  } else if (st.kind === 'press') {
+    title = `${st.up ? 'Up' : 'Down'} about ${st.approx} mm`;
+    if (!p) {
+      text = `Hold the ${st.up ? 'UP' : 'DOWN'} button until the desk has moved about ${st.approx} mm on the tape, then let go. One press, no extra taps.`;
+    } else if (p.error) {
+      text = `${p.error} Enter where the desk is now, then do this step again from there.`;
+      form = true;
+    } else {
+      text = `Held for ${(p.ms / 1000).toFixed(2)} s. Read where it actually stopped, not where you aimed.`;
+      form = true;
+    }
+  } else {
+    title = cal.result.bad ? 'That did not work out' : 'Result';
+    text = cal.result.bad
+      ? 'These values are outside what the desk accepts, most likely a misread height. Start over and measure carefully.'
+      : `Saving stores the new values and sets the stored height to ${calFinalMm()} mm, your last reading.`;
+  }
+
+  $('cal-step').textContent = `Step ${cal.step + 1} of ${CAL_STEPS.length}`;
+  $('cal-title').textContent = title;
+  $('cal-text').textContent = text;
+  $('cal-live').hidden = !(st.kind === 'press' && !p && connected && s.manual);
+  $('cal-form').hidden = !form;
+  setErr('cal-err', cal.error);
+  $('cal-result').hidden = st.kind !== 'result';
+  $('cal-home').hidden = st.kind !== 'home';
+  $('cal-save').hidden = !(st.kind === 'result' && !cal.result.bad);
+  $('cal-redo').hidden = st.kind !== 'result';
+  if (st.kind === 'home') $('cal-home').disabled = $('cal-home').disabled || s.moving || s.manual;
+  if (form && cal.focus) { cal.focus = false; $('cal-h').focus(); }
+}
+
+$('cal-start').addEventListener('click', calStart);
+$('cal-cancel').addEventListener('click', () => calEnd('Calibration cancelled'));
+$('cal-redo').addEventListener('click', () => {
+  if (!cal) return;
+  cal.d = []; cal.t = []; cal.result = null;
+  calEnter(0);
+});
+
+$('cal-home').addEventListener('click', async (e) => {
+  if (!cal) return;
+  const c = cal, btn = e.currentTarget;
+  btn.dataset.busy = '1'; btn.disabled = true;
+  try { await api('/calibrate', 'POST', c.desk); }   // bottom stop = 735 mm, error 0
+  catch (err) { toast(errMsg(err), true); return; }
+  finally { delete btn.dataset.busy; }
+  if (cal === c) calEnter(1);
+});
+
+$('cal-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!cal) return;
+  const st = CAL_STEPS[cal.step];
+  const inp = $('cal-h');
+  const raw = inp.value.trim().replace(',', '.');
+  const v = Number(raw);
+  if (!raw || !Number.isFinite(v) || v <= 0) {
+    cal.error = 'Enter the height in mm';
+    inp.setAttribute('aria-invalid', 'true');
+    render();
+    return;
+  }
+  if (st.kind === 'read') { cal.h0 = v; cal.last = v; calEnter(cal.step + 1); return; }
+  if (st.kind !== 'press' || !cal.press) return;
+  if (cal.press.error) { cal.last = v; calEnter(cal.step); return; }   // new starting point, same step
+
+  const d = Math.round((st.up ? v - cal.last : cal.last - v) * 10) / 10;
+  const err = calCheck(st, d, v);
+  cal.last = v;
+  if (err) {
+    calEnter(cal.step);
+    cal.error = `${err} Do this step again from here.`;
+    render();
+    return;
+  }
+  cal.d.push(d);
+  cal.t.push(cal.press.ms);
+  calEnter(cal.step + 1);
+});
+
+$('cal-save').addEventListener('click', async (e) => {
+  if (!cal || !cal.result || cal.result.bad) return;
+  const c = cal, r = c.result, btn = e.currentTarget;
+  const lagUp = round(r.up.lag), lagDown = round(r.down.lag);
+  const mm = calFinalMm();
+  btn.dataset.busy = '1'; btn.disabled = true;
+  try {
+    // /config wants the time of a full run (lag included once), it divides back to ms/mm
+    await api('/config' + qs({
+      upMs: (lagUp + 500 * r.up.k).toFixed(1),
+      downMs: (lagDown + 500 * r.down.k).toFixed(1),
+      travelMm: 500, upLagMs: lagUp, downLagMs: lagDown,
+    }), 'POST', c.desk);
+    await api('/setposition' + qs({ mm }), 'POST', c.desk);
+  } catch (err) {
+    toast(errMsg(err), true);
+    return;
+  } finally {
+    delete btn.dataset.busy;
+  }
+  await calEnd('Calibration saved');
+  loadConfig();
+});
+
+addEventListener('beforeunload', (e) => {
+  if (!cal) return;
+  e.preventDefault();
+  e.returnValue = '';   // lock and auto switch stay paused if the page is closed now
 });
 
 /* ======= Device ======= */
