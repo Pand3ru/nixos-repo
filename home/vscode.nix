@@ -27,7 +27,15 @@ in
       ghc
       cabal-install
       stack
-      texlive.combined.scheme-full
+      # scheme-full is several GB; medium plus what LaTeX Workshop's latexmk
+      # recipe, its latexindent formatter and biblatex/Zotero citations need.
+      (texliveMedium.withPackages (ps: with ps; [
+        latexmk
+        latexindent
+        biber
+        biblatex
+        collection-langgerman
+      ]))
       typst
       zlib
       openssl

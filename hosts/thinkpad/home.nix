@@ -5,11 +5,12 @@
 	../../home/zsh.nix
 	../../home/theming.nix
 	../../home/catppuccin.nix
-	../../home/solaar.nix
 	../../home/nvim.nix
     ../../home/firefox/firefox.nix
     ../../home/git.nix
     ../../home/dconf/settings.nix
+    ../../home/dconf/paperwm.nix
+    ../../home/dconf/arcmenu.nix
     ../../home/ssh.nix
     ../../home/zellij.nix
     ../../home/thunderbird.nix

@@ -35,12 +35,15 @@ in
     ../../system/desk-stats.nix
     ../../system/desk-backup.nix
     ../../system/vaultwarden.nix
+    ../../system/forgejo.nix
+    ../../system/texlyre.nix
   ];
 
   
   restic.paths = [
     "/mnt/cloud/"
     "/var/lib/vaultwarde/backup"
+    "/var/lib/forgejo/dump"
   ];
 
   # Initramfs ssh daemon to unlock luks remotely

@@ -1,17 +1,3 @@
--- vimtex
-vim.g.vimtex_view_method = "zathura"
-vim.g.vimtex_compiler_method = "latexmk"
-vim.g.vimtex_compiler_latexmk = {
-  continuous = 1,
-  out_dir = "build",
-  options = {
-    "-pdf",
-    "-interaction=nonstopmode",
-    "-synctex=1",
-  },
-}
-vim.g.vimtex_quickfix_mode = 0
-
 -- telescope
 require("telescope").setup({
   defaults = {
@@ -39,9 +25,6 @@ require("blink.cmp").setup({
   },
   sources = {
     default = { "lsp", "path", "snippets", "buffer" },
-    per_filetype = {
-      tex = { "buffer", "path", "snippets" },
-    },
   },
   fuzzy = { implementation = "prefer_rust_with_warning" },
   completion = {

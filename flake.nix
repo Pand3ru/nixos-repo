@@ -17,11 +17,6 @@
 
     catppuccin.url = "github:catppuccin/nix";
     catppuccin.inputs.nixpkgs.follows = "nixpkgs";
-
-    umlaut-panel = {
-      url = "github:Pand3ru/Umlaut";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, nixpkgs, home-manager, agenix, nix-vscode-extensions, nixpkgs-unstable, ... }@inputs:

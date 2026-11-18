@@ -12,13 +12,13 @@
   "org/gnome/shell" = {
     disable-user-extensions = false;
     enabled-extensions = [
-      "pop-shell@System76"
+      "paperwm@paperwm.github.com"
+      "arcmenu@arcmenu.com"
       "blur-my-shell@aunetx"
       "just-perfection-desktop@just-perfection"
       "gsconnect@andyholmes.github.io"
       "dash-to-dock@micxgx.gmail.com"
-      "tilingshell@ferrarodomenico.com"
-      "umlaut-panel@local"
+      "rounded-window-corners@fxgn"
     ];
     disabled-extensions = [ ];
   };
@@ -33,22 +33,26 @@
     natural-scroll = false;
   };
 
-  "org/gnome/shell/extensions/pop-shell" = {
-    tile-by-default = false;
-    active-hint = false; 
-    show-decoration = false;
-  };
-  
   "org/gnome/desktop/peripherals/touchpad" = {
     natural-scroll = false;
   };
 
   "org/gnome/mutter" = {
     dynamic-workspaces = false;
+    # Tapping Super alone no longer opens the overview.
+    overlay-key = "";
+  };
+
+  # <Super>p (display switching by default) opens the launcher instead
+  # (arcmenu.nix).
+  "org/gnome/mutter/keybindings" = {
+    switch-monitor = [ "XF86Display" ];
   };
 
   "org/gnome/desktop/wm/preferences" = {
     num-workspaces = 4;
+    # No close/minimize/maximize buttons in title bars and header bars.
+    button-layout = ":";
   };
 
   # A small, autohiding dock/app bar. It stays out of the way and only shows
@@ -70,24 +74,32 @@
     switch-applications = [ ];
     switch-windows = [ ];
 
-    close = [ "<Super>," ];
     minimize = [ "" ];
-    toggle-maximized = [ "<Super>f" ];
     toggle-fullscreen = [ "F11" ];
     show-desktop = [ "" ];
   };
 
   "org/gnome/settings-daemon/plugins/media-keys" = {
     screensaver = [ "<Alt>l" ];
-    terminal = [ "<Super>Return" ]; 
     home = [ "" ];
     www = [ "" ];
     email = [ "" ];
     calculator = [ "" ];
+    # GNOME 50 dropped the built-in `terminal` key, so it's a custom binding.
+    custom-keybindings = [
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/terminal/"
+    ];
+  };
+
+  "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/terminal" = {
+    name = "Terminal";
+    command = "${config.programs.alacritty.package}/bin/alacritty";
+    binding = "<Super><Shift>Return";
   };
 
   "org/gnome/shell/extensions/just-perfection" = {
     hide-window-titlebars = true;
+    theme = true;
   };
 
   "org/gnome/desktop/interface" = {

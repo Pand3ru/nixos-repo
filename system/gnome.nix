@@ -6,14 +6,8 @@
     HandleLidSwitchDocked = "ignore";
   };
 
-  # Needed so solaar can simulate a key press (Wayland) for its MX Master
-  # button diversion rule.
+  # Needed so espanso can inject its replacements on Wayland.
   hardware.uinput.enable = true;
-
-  # Without this, solaar's udev rules (granting the logged-in seat user
-  # raw hidraw access to Logitech devices) never get installed, so it can
-  # only talk to the receiver as root.
-  services.udev.packages = [ pkgs.solaar ];
 
   services.gnome.gnome-keyring.enable = true;
   services.gvfs.enable = true;
@@ -30,9 +24,7 @@
       vim
       wget
       gnome-network-displays
-      solaar
       openh264 # this seems to maybe be related to gnome-network-displays
-      inputs.umlaut-panel.packages.${pkgs.stdenv.hostPlatform.system}.default
     ] ++ (with pkgs.gnomeExtensions; [
 
     # Remember to update them in the "Extensions" application
@@ -40,16 +32,15 @@
     wiggle
     paperwm
     caffeine
-    desktop-cube
     just-perfection
     clipboard-history
     workspace-indicator
     blur-my-shell
     gsconnect
-    solaar-extension
     dash-to-dock
     user-themes
-    tiling-shell
+    arcmenu
+    rounded-window-corners-reborn
   ]);
 
   environment.gnome = {
