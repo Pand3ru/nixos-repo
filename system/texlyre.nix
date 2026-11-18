@@ -15,6 +15,19 @@ let
       }
     }
   '';
+
+  # The image's service worker also cache.put()s the 200 MB BusyTeX bundles from waitUntil.
+  # Firefox stops a service worker after 30 s idle + 30 s extended, which kills that download
+  # over the home uplink. Let core/busytex/ bypass it; BusyTeX caches the bundles in IndexedDB.
+  swPatch = pkgs.writeScript "20-texlyre-sw.sh" ''
+    #!/bin/sh
+    set -eu
+    sw=/usr/share/nginx/html/sw.js
+    anchor='  if (!isSameOriginAppResource && !isAllowedExternalResource) {'
+    grep -qF "$anchor" "$sw" || { echo "texlyre: sw.js anchor not found, not patching" >&2; exit 1; }
+    awk -v a="$anchor" '$0 == a { print "  if (url.pathname.startsWith(BASE_PATH + \"core/busytex/\")) {"; print "    return;"; print "  }"; print "" } { print }' "$sw" > /tmp/sw.js
+    cat /tmp/sw.js > "$sw"
+  '';
 in
 {
   services.caddy.virtualHosts."tex.panderu.org".extraConfig = ''
@@ -32,7 +45,10 @@ in
     texlyre-frontend = {
       image = "ghcr.io/texlyre/texlyre-frontend:0.14.1";
       ports = [ "127.0.0.1:8090:80" ];
-      volumes = [ "${nginxConf}:/etc/nginx/conf.d/default.conf:ro" ];
+      volumes = [
+        "${nginxConf}:/etc/nginx/conf.d/default.conf:ro"
+        "${swPatch}:/docker-entrypoint.d/20-texlyre-sw.sh:ro"
+      ];
       environment = {
         SERVICES = "none";
         # The image's base userdata is the local dev build (localhost endpoints), so every
