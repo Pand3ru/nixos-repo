@@ -33,8 +33,15 @@ in
       volumes = [ "${nginxConf}:/etc/nginx/conf.d/default.conf:ro" ];
       environment = {
         SERVICES = "none";
+        # The image's base userdata is the local dev build (localhost endpoints), so every
+        # endpoint is set here: signaling is ours, the rest are TeXlyre's public servers.
         TEXLYRE_USERDATA = builtins.toJSON {
-          settings."collab-signaling-servers" = "wss://tex.panderu.org/signaling";
+          settings = {
+            "collab-signaling-servers" = "wss://tex.panderu.org/signaling";
+            "file-sync-server-url" = "https://filepizza.texlyre.org";
+            "latex-texlive-endpoint" = "https://texlive.texlyre.org";
+            "latex-busytex-endpoint" = "https://texlive2026.texlyre.org";
+          };
         };
       };
       extraOptions = [ "--security-opt=no-new-privileges" ];
