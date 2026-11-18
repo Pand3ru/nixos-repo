@@ -23,6 +23,12 @@ in
     services.caddy = {
       enable = true;
       email = "acme@pankratov.de";
+      # No HTTP/3: UDP 443 isn't open, and Firefox stalls WebSockets on the advertised h3
+      globalConfig = ''
+        servers {
+          protocols h1 h2
+        }
+      '';
     };
 
     systemd.services.caddy.serviceConfig = {
