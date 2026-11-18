@@ -18,6 +18,8 @@ let
 in
 {
   services.caddy.virtualHosts."tex.panderu.org".extraConfig = ''
+    # The TeX Live bundles are a few hundred MB of mostly text
+    encode zstd gzip
     handle_path /signaling* {
       reverse_proxy 127.0.0.1:8091
     }
