@@ -4,8 +4,7 @@ let
   dataDir = "/var/lib/aldine";
   network = "aldine-backend";
 
-  # Both images run as root inside; map that to an unprivileged host range. Both containers
-  # need the same mapping since they share /data.
+  # Container root -> unprivileged host uid, same for both since they share /data
   idmap = [ "--uidmap=0:200000:65536" "--gidmap=0:200000:65536" ];
 in
 {
@@ -18,7 +17,6 @@ in
     "d ${dataDir}/secrets 0700 200000 200000 -"
   ];
 
-  # The compiler sits only on this network, which has no route out
   systemd.services.podman-network-aldine = {
     description = "Podman network for Aldine";
     before = [ "podman-aldine-app.service" "podman-aldine-compiler.service" ];
@@ -34,7 +32,7 @@ in
   };
 
   virtualisation.oci-containers.containers = {
-    # Runs untrusted LaTeX: no network egress, no capabilities, bounded memory and PIDs
+    # Runs untrusted LaTeX
     aldine-compiler = {
       image = "ghcr.io/trahloff/aldine-compiler:${version}";
       networks = [ network ];
@@ -69,11 +67,12 @@ in
         ALDINE_SIGNUP = "approval";
         ALDINE_PUBLIC_URL = "https://tex.panderu.org";
       };
-      # ALDINE_ADMIN_EMAILS, optionally SMTP_*
       environmentFiles = [ config.age.secrets.aldine.path ];
       extraOptions = [
         "--security-opt=no-new-privileges"
         "--init"
+        # The internal network's DNS doesn't resolve outside names
+        "--add-host=git.panderu.org:host-gateway"
       ] ++ idmap;
     };
   };

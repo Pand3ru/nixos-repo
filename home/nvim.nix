@@ -3,7 +3,6 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    # The config is pure Lua; no plugin needs the Ruby or Python providers.
     withRuby = false;
     withPython3 = false;
 

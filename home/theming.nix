@@ -64,7 +64,6 @@ in
           x = 10;
           y = 10;
         };
-        # PaperWM tiles it; no title bar needed.
         decorations = "None";
       };
       font = {

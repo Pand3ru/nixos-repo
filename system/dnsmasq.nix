@@ -9,8 +9,7 @@
       "/grafana.home/192.168.50.203"
       ];
       server = [ "76.76.2.2" "76.76.10.2" ];
-      # Bind per interface instead of the wildcard and stay off podman bridges, whose
-      # 10.89.x.1:53 belongs to aardvark-dns (container name resolution, see aldine.nix).
+      # Leave the podman bridges to aardvark-dns (aldine.nix)
       bind-dynamic = true;
       except-interface = "podman*";
     };

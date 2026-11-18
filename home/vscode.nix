@@ -27,8 +27,6 @@ in
       ghc
       cabal-install
       stack
-      # scheme-full is several GB; medium plus what LaTeX Workshop's latexmk
-      # recipe, its latexindent formatter and biblatex/Zotero citations need.
       (texliveMedium.withPackages (ps: with ps; [
         latexmk
         latexindent

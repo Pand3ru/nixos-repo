@@ -39,19 +39,16 @@
 
   "org/gnome/mutter" = {
     dynamic-workspaces = false;
-    # Tapping Super alone no longer opens the overview.
     overlay-key = "";
   };
 
-  # <Super>p (display switching by default) opens the launcher instead
-  # (arcmenu.nix).
+  # Frees <Super>p for ArcMenu
   "org/gnome/mutter/keybindings" = {
     switch-monitor = [ "XF86Display" ];
   };
 
   "org/gnome/desktop/wm/preferences" = {
     num-workspaces = 4;
-    # No close/minimize/maximize buttons in title bars and header bars.
     button-layout = ":";
   };
 
@@ -85,7 +82,7 @@
     www = [ "" ];
     email = [ "" ];
     calculator = [ "" ];
-    # GNOME 50 dropped the built-in `terminal` key, so it's a custom binding.
+    # GNOME 50 dropped the built-in terminal key
     custom-keybindings = [
       "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/terminal/"
     ];
