@@ -66,6 +66,8 @@ in
         AUTH_ENABLED = "1";
         ALDINE_SIGNUP = "approval";
         ALDINE_PUBLIC_URL = "https://tex.panderu.org";
+        TRUST_PROXY = "1";
+        COOKIE_SECURE = "1";
       };
       environmentFiles = [ config.age.secrets.aldine.path ];
       extraOptions = [
