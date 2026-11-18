@@ -60,7 +60,6 @@ in
       }
     ];
 
-    services.caddy.virtualHosts."http://desk.home".bookmark = "Desk";
     # Also reachable by the server IP for devices that don't use dnsmasq
     services.caddy.virtualHosts."http://desk.home".serverAliases = [ "http://192.168.50.203" ];
     # Port 80 is open to the internet for ACME, so a spoofed Host header must not reach the desks.

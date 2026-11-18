@@ -250,7 +250,6 @@ in
   };
 
   services.caddy.virtualHosts."grafana.panderu.org" = {
-    bookmark = "Grafana";
     # Strip the auth proxy header: Caddy connects from the whitelisted 127.0.0.1
     extraConfig = ''
       reverse_proxy 127.0.0.1:${toString grafanaPort} {

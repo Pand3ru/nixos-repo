@@ -9,7 +9,6 @@ in
     copyparty.nixosModules.default
   ];
 
-  services.caddy.virtualHosts."cloud.panderu.org".bookmark = "Cloud";
   services.caddy.virtualHosts."cloud.panderu.org".extraConfig = ''
     reverse_proxy 127.0.0.1:3923
   '';

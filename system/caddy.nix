@@ -4,15 +4,9 @@ let
 in
 {
   # Extends every vhost, from any module: JSON access log that alloy can read (group caddy),
-  # kept for a month, plus an optional Firefox bookmark name (read by home/firefox/bookmarks.nix)
+  # kept for a month
   options.services.caddy.virtualHosts = lib.mkOption {
     type = lib.types.attrsOf (lib.types.submodule ({ config, ... }: {
-      options.bookmark = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "Bookmark name on the thinkpad, null for no bookmark.";
-      };
-
       config.logFormat = lib.mkDefault ''
         output file ${logDir}/access-${lib.replaceStrings [ "/" " " ] [ "_" "_" ] config.hostName}.log {
           mode 0640

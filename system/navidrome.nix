@@ -95,7 +95,6 @@ in
   };
 
   services.caddy.virtualHosts.${domain} = {
-    bookmark = "Navidrome";
     extraConfig = ''
       reverse_proxy 127.0.0.1:4533
     '';

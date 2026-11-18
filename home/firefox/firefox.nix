@@ -21,7 +21,7 @@ programs.firefox = {
 
     bookmarks = {
       force = true;
-      settings = [ (import ./bookmarks.nix { inherit lib inputs; }) ];
+      settings = [ (import ./bookmarks.nix { inherit lib; }) ];
     };
 
     # catppuccin.nix's Firefox module writes the Firefox Color theme via
