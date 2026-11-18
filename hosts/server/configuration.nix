@@ -36,7 +36,7 @@ in
     ../../system/desk-backup.nix
     ../../system/vaultwarden.nix
     ../../system/forgejo.nix
-    ../../system/texlyre.nix
+    ../../system/aldine.nix
   ];
 
   
@@ -44,6 +44,7 @@ in
     "/mnt/cloud/"
     "/var/lib/vaultwarde/backup"
     "/var/lib/forgejo/dump"
+    "/var/lib/aldine"
   ];
 
   # Initramfs ssh daemon to unlock luks remotely

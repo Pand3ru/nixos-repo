@@ -60,5 +60,10 @@
     healthchecks = {
       file = ../secrets/healthchecks.age;
     };
+
+    # Env file: ALDINE_ADMIN_EMAILS, optionally SMTP_HOST/PORT/SECURE/USER/PASS/FROM
+    aldine = {
+      file = ../secrets/aldine.age;
+    };
   };
 }

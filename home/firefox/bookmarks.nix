@@ -10,7 +10,7 @@ let
     (b "Grafana" "https://grafana.panderu.org/" [ "local" ])
     (b "Jellyfin" "http://media.home/" [ "local" ])
     (b "Navidrome" "https://music.panderu.org/" [ "local" ])
-    (b "TeXlyre" "https://tex.panderu.org/" [ "local" ])
+    (b "Aldine" "https://tex.panderu.org/" [ "local" ])
     (b "Vaultwarden" "https://vw.panderu.org/" [ "local" ])
   ];
 in

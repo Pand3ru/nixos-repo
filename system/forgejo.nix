@@ -27,13 +27,6 @@
 
       service.DISABLE_REGISTRATION = true;
       session.COOKIE_SECURE = true;
-
-      # For TeXlyre's backup. ALLOW_DOMAIN is matched against the full Origin, scheme included.
-      cors = {
-        ENABLED = true;
-        ALLOW_DOMAIN = "https://tex.panderu.org";
-        HEADERS = "Content-Type,User-Agent,Authorization";
-      };
     };
   };
 }

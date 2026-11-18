@@ -14,4 +14,5 @@ in {
   "email.age".publicKeys = [ thinkpad server ];
   "grafana.age".publicKeys = [ thinkpad server ];
   "healthchecks.age".publicKeys = [ thinkpad server ];
+  "aldine.age".publicKeys = [ thinkpad server ];
 }
